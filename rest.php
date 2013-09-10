@@ -19,7 +19,6 @@ class REST {
 
     protected $className; // Holding the name of the current class
     protected $db; // The PDO-wrapper
-    protected $fb; // The Facebook-SDK-wrapper
     protected $response = array(); // The response to be coded to json
     protected $id; // Holds the current user's id
     protected $methodUrl;
@@ -103,14 +102,7 @@ class REST {
                             else {
                                 // Not an ignore-case and we have a access_token! Validate it
                                 $access_token = $_GET['access_token'];
-                                if (substr($access_token,0,3) == 'geo') {
-                                    // GeoParty internal-token
-                                    $this->checkGeoPartyToken($access_token);
-                                }
-                                else {
-                                    // Facebook-token
-                                    $this->checkFbToken($access_token);
-                                }
+                                $this->checkToken($access_token);
                             }
                         }
                     }
@@ -127,14 +119,7 @@ class REST {
                             else {
                                 // Not an ignore-case and we have a access_token! Validate it
                                 $access_token = $_GET['access_token'];
-                                if (substr($access_token,0,3) == 'geo') {
-                                    // GeoParty internal-token
-                                    $this->checkGeoPartyToken($access_token);
-                                }
-                                else {
-                                    // Facebook-token
-                                    $this->checkFbToken($access_token);
-                                }
+                                $this->checkToken($access_token);
                             }
                         }
                     }
@@ -149,31 +134,24 @@ class REST {
                 else {
                     // Not an ignore-case and we have a access_token! Validate it
                     $access_token = $_GET['access_token'];
-                    if (substr($access_token,0,3) == 'geo') {
-                        // GeoParty internal-token
-                        $this->checkGeoPartyToken($access_token);
-                    }
-                    else {
-                        // Facebook-token
-                        $this->checkFbToken($access_token);
-                    }
+                    $this->checkToken($access_token);
                 }
             }
         }
     }
     
     //
-    // GeoParty
+    // Access token
     //
 
-    private function checkGeoPartyToken() {
-        $get_geo_access_token = "SELECT id
+    private function checkToken() {
+        $get_access_token = "SELECT id
         FROM user
         WHERE access_token = :access_token";
 
-        $get_geo_access_token_query = $this->db->prepare($get_geo_access_token);
-        $get_geo_access_token_query->execute(array(':access_token' => $_GET['access_token']));
-        $row = $get_geo_access_token_query->fetch(PDO::FETCH_ASSOC);
+        $get_token_query = $this->db->prepare($get_access_token);
+        $get_token_query->execute(array(':access_token' => $_GET['access_token']));
+        $row = $get_token_query->fetch(PDO::FETCH_ASSOC);
 
         if (isset($row['id']) and strlen($row['id']) > 0) {
             $this->id = $row['id'];
