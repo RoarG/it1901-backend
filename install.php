@@ -86,7 +86,68 @@ else {
 
 
 if (isset($_POST['sync'])) {
-    //
+    $state = 'ok';
+    $msg = '';
+    $dir = dirname(__FILE__).'/dump/';
+    if ($handle = opendir($dir)) {
+        // Read all files
+        $arr = array();
+        while (false !== ($entry = readdir($handle))) {
+            if ($entry != '.' and $entry != '..') {
+                $modified = filemtime($dir.$entry);
+                if (array_key_exists($modified,$arr)) {
+                    $arr[$modified][] = $entry; 
+                }
+                else {
+                    $arr[$modified] = array($entry);
+                }
+            }
+        }
+        
+        // Sort to get the newest file
+        krsort($arr);
+        
+        // Get the newest file
+        $dump_file = $arr[key($arr)][0];
+        $full_file = $dir.$dump_file;
+        
+        // Run query
+        if ($db_connected) {
+            $content_loaded = true;
+            try {
+                $content = file_get_contents($full_file);
+            }
+            catch(Exception $ex){
+                $content_loaded = false;
+            }
+            
+            if (!$content_loaded) {
+                $state = 'error';
+                $msg = 'Could not load content from file: '.$full_file;  
+            }
+            else {
+                $sync = $db->query($content);
+                if (!$results) {
+                    $state = 'error';
+                    $msg = 'Could not execute databasesync';
+                }
+                else {
+                    $msg = 'Sync was successfull!!';
+                }
+                    
+            }
+        }
+        else {
+            $state = 'error';
+            $msg = 'Error in database-connection. Could not execute sync';
+        }
+    }
+    else {
+        $state = 'error';
+        $msg = 'Could not open directory in: '.$dir;
+    }
+    
+    header("Location: install.php?state=$state&msg=$msg");
 }
 
 ?>
@@ -100,10 +161,16 @@ if (isset($_POST['sync'])) {
 <p>Lorem ipsum</p>
 <h1>Validate system</h1>
 <?php echo $validate_system; ?>
+<p>More info <a href="sys.php" target="_blank">phpinfo()</a></p>
 <h1>Sync database</h1>
 <p>While developing, syncing the database is required from time to time.<br />Sync by clicking the button under. Note that the entire database will be overwritten.</p>
 <form action="" method="post">
-    <input type="submit" value="Sync" name="sync" <?php echo ((!$all_ok)?'disabled="disabled"':''); ?> /> <?php echo ((!$all_ok)?'<span style="color: red; font-size: 13px;">You may only sync if there are no problems with the system</span>':''); ?> 
+    <input type="submit" value="Sync" name="sync" <?php echo ((!$all_ok and $db_connected == false)?'disabled="disabled"':''); ?> /> <?php echo ((!$all_ok and $db_connected == false)?'<span style="color: red; font-size: 13px;">You may only sync if there are no problems with the system</span>':''); ?> 
+    <?php
+    if (isset($_GET['state'])) {
+        echo '<p style="color: '.(($_GET['state'] == 'ok')?'green':'red').'">'.$_GET['msg'].'</p>';
+    }
+    ?>
 </form>
 </body>
 </html>
