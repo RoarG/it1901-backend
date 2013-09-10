@@ -2,9 +2,8 @@
 /*
  * File: index.php
  * Holds: The Loader-class that loads the correct class based on the method being called, setting output and including all the stuff we need
- * Written by: Thomas Gautvedt
- * Last updated: 01.06.13
- * Project: GeoParty-REST
+ * Last updated: 10.09.13
+ * Project: Prosjekt1
  * 
 */
 
@@ -32,7 +31,6 @@ header('Content-Type: application/json; charset=utf-8');
 //
 
 require_once 'rest.php';
-require_once 'lib/fb/facebook.php';
 require_once 'lib/rand/rand.php';
 require_once 'lib/password_hash/password_hash.php';
 
