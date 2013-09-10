@@ -42,7 +42,7 @@ if (file_exists(dirname(__FILE__).'/local.php')) {
     require_once 'local.php';
 }
 else {
-    die('You must copy the file <b>local-example.php</b>, rename it to <b>local.php</b> and include your database-information.');
+    die('You must copy the file local-example.php, rename it to local.php and include your database-information.');
 }
 
 //
