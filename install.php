@@ -159,7 +159,7 @@ if (isset($_POST['sync'])) {
 <body>
 <h1>G6</h1>
 <p>Lorem ipsum</p>
-<h1>Validate system</h1>
+<h1>System info</h1>
 <?php echo $validate_system; ?>
 <p>More info <a href="sys.php" target="_blank">phpinfo()</a></p>
 <h1>Sync database</h1>
