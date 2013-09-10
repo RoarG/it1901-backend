@@ -35,6 +35,17 @@ require_once 'lib/rand/rand.php';
 require_once 'lib/password_hash/password_hash.php';
 
 //
+// Trying to include local.php
+//
+
+if (file_exists(dirname(__FILE__).'/local.php')) {
+    require_once 'local.php';
+}
+else {
+    die('You must copy the file <b>local-example.php</b>, rename it to <b>local.php</b> and include your database-information.');
+}
+
+//
 // The Loader-class, loads the correct class extended from REST depending on the method being called
 //
 
