@@ -1,2 +1,4 @@
-IT1901Gr6_1
+G6 - Backend
 ===========
+
+Work in progress PHP REST-api.
