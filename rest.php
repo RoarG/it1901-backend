@@ -43,7 +43,7 @@ class REST {
     public function __construct() {
         // Trying to connect to the database
         try {
-            $this->db = new PDO("mysql:host=localhost;dbname=****", '***', '***', array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
+            $this->db = new PDO("mysql:host=".DATABASE_HOST.";dbname=".DATABASE_TABLE, DATABASE_USER, DATABASE_PASSWORD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
         } catch (Exception $e) {
             // Catch exception and returning the error
             $this->setReponseState(100, 'Could not connect to database');
