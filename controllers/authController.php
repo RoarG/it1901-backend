@@ -2,9 +2,8 @@
 /*
  * File: authController.php
  * Holds: The AuthController-class with all the methods for the auth-calls
- * Written by: Thomas Gautvedt
- * Last updated: 02.06.13
- * Project: GeoParty-REST
+ * Last updated: 10.09.13
+ * Project: Prosjekt1
  * 
 */
 
@@ -117,87 +116,6 @@ class AuthController extends REST {
         // Returning
         return $ret;
     }
-    
-    // Returning information about the given user
-    protected function get_auth_validate() {
-        $get_validate = "SELECT id, display_pos, display_groups_map, access_token
-        FROM user
-        WHERE id = :id";
-        
-        $get_validate_query = $this->db->prepare($get_validate);
-        $get_validate_query->execute(array(':id' => $this->id));
-        $row = $get_validate_query->fetch(PDO::FETCH_ASSOC);
-        
-        // Checking to see if the actual user exists
-        if (isset($row['id']) and strlen($row['id']) > 0) {
-            // Getting total number of invites pendling
-            $get_invites_user = "SELECT COUNT(id) as 'number_invites' 
-            FROM invite 
-            WHERE uid = :uid";
-            
-            $get_invites_user_query = $this->db->prepare($get_invites_user);
-            $get_invites_user_query->execute(array(':uid' => $this->id));
-            $invites_row = $get_invites_user_query->fetch(PDO::FETCH_ASSOC);
-            $row['invites'] = $invites_row['number_invites'];
-            
-            return $row;
-        }
-        else {
-            $this->setReponseState(131, 'No such user');
-            return;
-        }
-    }
-    
-        // Method that validates the current user
-    /*
-    protected function get_user_validate() {
-        // This method checks the user-agent and checks if the device-token is set. This method runs at app-startup once
-        $checkDevice = false;
-        $deviceType = 1;
-        $response = array();
-
-        if(strstr($_SERVER['HTTP_USER_AGENT'],'CFNetwork')) {
-            // iPhone or iPad-device
-            $checkDevice = true;
-        }
-        else if (2 == 3) {
-            // Android-device
-            $checkDevice = true;
-            $deviceType = 0;
-        }
-
-        if ($checkDevice) {
-            $statement = $this->db->prepare("SELECT device_type, ios_device_token, android_device_token FROM user WHERE id = :id");
-            $statement->execute(array(':id' => $this->id));
-            $row = $statement->fetch(PDO::FETCH_ASSOC);
-            if ($row) {
-                if ($deviceType == $row['device_type']) {
-                    if ($deviceType == 1) {
-                        $response = array('state' => 'ok', 'token' => $row['ios_device_token']);
-                    }
-                    else if ($deviceType == 0) {
-                        $response = array('state' => 'ok', 'token' => $row['android_device_token']);
-                    }
-                    else {
-                        // Update device_type
-                        $response = array('state' => 'error');
-                    }
-                }
-                else {
-                    // Update device_type
-                }
-            }
-            else {
-                $this->setReponseState(131, 'No such user');
-                $response = array('state' => 'error');
-            }
-        }
-        else {
-            $response = array('state' => 'nodevice');
-        }
-
-        return $response;
-    }*/
 }
 
 //
