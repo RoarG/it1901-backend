@@ -2,9 +2,8 @@
 /*
  * File: rest.php
  * Holds: The REST-api with all its methods minus the actual api-methods being called
- * Written by: Thomas Gautvedt
  * Last updated: 01.06.13
- * Project: GeoParty-REST
+ * Project: Prosjekt1
  * 
 */
 
