@@ -2,9 +2,8 @@
 /*
  * File: run.php
  * Holds: Method to initiate the different controllers dynamically
- * Written by: Thomas Gautvedt
- * Last updated: 20.05.13
- * Project: GeoParty-REST
+ * Last updated: 10.09.13
+ * Project: Prosjekt1
  * 
 */
 
