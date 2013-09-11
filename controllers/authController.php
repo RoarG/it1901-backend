@@ -61,14 +61,14 @@ class AuthController extends REST {
     protected function put_auth() {
         // Variable for returning values
         $ret = array();
-
+        
         // Checking to see if we have all the parameters we need
         if ($this->checkRequiredParams(array('email','pswd'),$_POST)) {
 
             // We have all the parameters, is the "username" a valid email?
             if(preg_match("/^([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+$/", $_POST['email'])) {
                 // Valid email, let's try to login!
-                $get_auth_values = "SELECT id, salt, display_pos, display_groups_map, access_token 
+                $get_auth_values = "SELECT id, salt, access_token 
                 FROM user 
                 WHERE email = :email 
                 AND pswd = :pswd";
@@ -89,17 +89,9 @@ class AuthController extends REST {
                     $statement = $this->db->prepare("UPDATE user SET access_token = :access_token WHERE id = :id");
                     $statement->execute(array(':access_token' => $access_token, ':id' => $this->id));
                     
-                    // Getting total number of invites pendling
-                    $get_invites_user = "SELECT COUNT(id) as 'number_invites' 
-                    FROM invite 
-                    WHERE uid = :uid";
-                    
-                    $get_invites_user_query = $this->db->prepare($get_invites_user);
-                    $get_invites_user_query->execute(array(':uid' => $this->id));
-                    $invites_row = $get_invites_user_query->fetch(PDO::FETCH_ASSOC);
                     
                     // Returning successful message to user with the new access_token
-                    $ret = array('access_token' => $access_token, 'id' => $row['id'], 'display_pos' => $row['display_pos'], 'display_groups_map' => $row['display_groups_map'], 'invites' => $invites_row['number_invites']);
+                    $ret = array('access_token' => $access_token, 'id' => $row['id']);
                 }
                 else {
                     $this->setReponseState(131, 'No such user');
