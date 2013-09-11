@@ -30,6 +30,16 @@ class REST {
     private $path = array(
         // Auth
         '/auth' => 'auth', // GET, PUT
+        
+        // User
+        // TODO
+        
+        // Sheep
+        '/sheep' => 'sheep', // GET
+        '/sheep/(:id)' => 'sheep_one', // GET, PUT, DELETE, POST
+        
+        // Map
+        '/map' => 'map', // GET
     );
 
     private $ignore_no_at = array(
