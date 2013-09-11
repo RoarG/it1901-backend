@@ -89,9 +89,17 @@ class AuthController extends REST {
                     $statement = $this->db->prepare("UPDATE user SET access_token = :access_token WHERE id = :id");
                     $statement->execute(array(':access_token' => $access_token, ':id' => $this->id));
                     
+                    // Loading information about the current system
+                    $get_system = "SELECT sys.* 
+                    FROM system sys
+                    LEFT JOIN system_user sys_usr ON sys_usr.system = sys.id
+                    WHERE sys_usr.user = :id";
+                    $get_system_query = $this->db->prepare($get_system);
+                    $get_system_query->execute(array(':id' => $this->id));
+                    $system = $get_system_query->fetch(PDO::FETCH_ASSOC);
                     
                     // Returning successful message to user with the new access_token
-                    $ret = array('access_token' => $access_token, 'id' => $row['id']);
+                    $ret = array('access_token' => $access_token, 'user_id' => $row['id'], 'system_id' => $system['id'], 'system_name' => $system['name']);
                 }
                 else {
                     $this->setReponseState(131, 'No such user');
