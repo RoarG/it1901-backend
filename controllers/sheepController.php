@@ -31,7 +31,25 @@ class SheepController extends REST {
     
     // Getting a list with all the sheeps for the current system
     protected function get_sheep() {
+        // Defining return-array
+        $return = array();
+        $return['sheep'] = array();
         
+        // Getting all sheeps for the current system
+        $get_all_sheeps = "SELECT sh.id, sh.identification, sh.name, sh.alive
+        FROM sheep sh 
+        LEFT JOIN system_sheep AS sh_sys ON sh_sys.sheep = sh.id
+        WHERE sh_sys.system = 1
+        ORDER BY sh.id ASC";
+        
+        $get_all_sheeps_query = $this->db->prepare($get_all_sheeps);
+        $get_all_sheeps_query->execute(array(':id' => $this->id));
+        while ($row = $get_all_sheeps_query->fetch(PDO::FETCH_ASSOC)) {
+            // Adding the row to the array
+            $return['sheep'][] = $row;
+        }
+        
+        return $return;
     }
 }
 
