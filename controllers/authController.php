@@ -35,7 +35,7 @@ class AuthController extends REST {
         $randomArr = $randomGen->getRnd();
 
         // Using the password_hash-function to hash the access_token
-        $hash = 'geo'.password_hash(substr($usern,1).'+'.$randomArr[rand(0,(count($randomArr)-1))].'+'.rand(0,10000).time(), PASSWORD_BCRYPT, array('cost' => 12, 'salt' => $salt));
+        $hash = password_hash(substr($usern,1).'+'.$randomArr[rand(0,(count($randomArr)-1))].'+'.rand(0,10000).time(), PASSWORD_BCRYPT, array('cost' => 12, 'salt' => $salt));
         return $hash;
     }
 
