@@ -37,7 +37,7 @@ class REST {
         
         // Sheep
         '/sheep' => 'sheep', // GET
-        '/sheep/(:id)' => 'sheep_one', // GET, PUT, DELETE, POST
+        '/sheep/(:id)' => 'sheep_single', // GET, PUT, DELETE, POST
         
         // Map
         '/map' => 'map', // GET

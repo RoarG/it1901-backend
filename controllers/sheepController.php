@@ -32,8 +32,8 @@ class SheepController extends REST {
     // Getting a list with all the sheeps for the current system
     protected function get_sheep() {
         // Defining return-array
-        $return = array();
-        $return['sheep'] = array();
+        $ret = array();
+        $ret['sheep'] = array();
         
         // Getting all sheeps for the current system
         $get_all_sheeps = "SELECT sh.id, sh.identification, sh.name, sh.alive
@@ -46,10 +46,35 @@ class SheepController extends REST {
         $get_all_sheeps_query->execute(array(':system' => $this->system));
         while ($row = $get_all_sheeps_query->fetch(PDO::FETCH_ASSOC)) {
             // Adding the row to the array
-            $return['sheep'][] = $row;
+            $ret['sheep'][] = $row;
         }
         
-        return $return;
+        return $ret;
+    }
+    
+    // Get all information about one sheep
+    protected function get_sheep_single($id) {
+        // Defining return-array
+        $ret = array();
+        
+        // Get information about one sheep (if it exists)
+        $get_sheep = "SELECT sh.*
+        FROM sheep sh 
+        LEFT JOIN system_sheep AS sh_sys ON sh_sys.sheep = sh.id
+        WHERE sh_sys.system = :system
+        AND sh_sys.sheep = :id
+        ORDER BY sh.id ASC";
+        
+        $get_sheep_query = $this->db->prepare($get_sheep);
+        $get_sheep_query->execute(array(':system' => $this->system, ':id' => $id));
+        $row = $get_sheep_query->fetch(PDO::FETCH_ASSOC);
+        
+        // Checking if sheep exists
+        if (!isset($row['id'])) {
+            $this->setReponseState(141, 'No such sheep');
+        }
+        
+        return $row;
     }
 }
 
