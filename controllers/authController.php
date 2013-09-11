@@ -98,10 +98,22 @@ class AuthController extends REST {
                     $get_system_query->execute(array(':id' => $this->id));
                     $system = $get_system_query->fetch(PDO::FETCH_ASSOC);
                     
-                    // Get number of notifications!
+                    // Get number of unread notifications
+                    $get_notifications = "SELECT COUNT(id) as 'num_notifications'
+                    FROM notification
+                    WHERE system = :system
+                    AND is_read = 0";
+                    $get_notifications_query = $this->db->prepare($get_notifications);
+                    $get_notifications_query->execute(array(':system' => $system['id']));
+                    $notifications = $get_notifications_query->fetch(PDO::FETCH_ASSOC);
+                    
+                    // Fix the number if the query returned null
+                    if ($notifications['num_notifications'] == null) {
+                        $notifications['num_notifications'] = 0;
+                    }
                     
                     // Returning successful message to user with the new access_token
-                    $ret = array('access_token' => $access_token, 'user_id' => $row['id'], 'system_id' => $system['id'], 'system_name' => $system['name']);
+                    $ret = array('access_token' => $access_token, 'user_id' => $row['id'], 'system_id' => $system['id'], 'system_name' => $system['name'], 'notifications' => $notifications['num_notifications']);
                 }
                 else {
                     $this->setReponseState(131, 'No such user');
