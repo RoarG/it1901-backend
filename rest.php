@@ -21,6 +21,7 @@ class REST {
     protected $db; // The PDO-wrapper
     protected $response = array(); // The response to be coded to json
     protected $id; // Holds the current user's id
+    protected $system; // Holds the current system id
     protected $methodUrl;
 
     //
@@ -164,7 +165,22 @@ class REST {
         $row = $get_token_query->fetch(PDO::FETCH_ASSOC);
 
         if (isset($row['id']) and strlen($row['id']) > 0) {
+            // Storing the current userid
             $this->id = $row['id'];
+            
+            // Load the current system and store the id for later
+            $get_system = "SELECT sys.id
+            FROM system sys
+            LEFT JOIN system_user sys_usr ON sys_usr.system = sys.id
+            WHERE sys_usr.user = :user_id";
+            
+            $get_system_query = $this->db->prepare($get_system);
+            $get_system_query->execute(array(':user_id' => $this->id));
+            $sys = $get_system_query->fetch(PDO::FETCH_ASSOC);
+            
+            // Storing the current systemid
+            $this->system = $sys['id'];
+            
             $this->doRequest();
         }
         else {
