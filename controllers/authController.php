@@ -90,7 +90,7 @@ class AuthController extends REST {
                     $statement->execute(array(':access_token' => $access_token, ':id' => $this->id));
                     
                     // Loading information about the current system
-                    $get_system = "SELECT sys.* 
+                    $get_system = "SELECT sys.id, sys.name
                     FROM system sys
                     LEFT JOIN system_user sys_usr ON sys_usr.system = sys.id
                     WHERE sys_usr.user = :id";
