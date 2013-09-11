@@ -368,7 +368,7 @@ class REST {
         }
         
         // The insert
-        $sql = "INSERT INTO log
+        $sql = "INSERT INTO sys_log
         (user, method, call_url, url, time, user_agent, get, post, response)
         VALUES (:user, :method, :call, :url, NOW(), :user_agent, :get, :post, :response)";
         $statement = $this->db->prepare($sql);
