@@ -39,11 +39,11 @@ class SheepController extends REST {
         $get_all_sheeps = "SELECT sh.id, sh.identification, sh.name, sh.alive
         FROM sheep sh 
         LEFT JOIN system_sheep AS sh_sys ON sh_sys.sheep = sh.id
-        WHERE sh_sys.system = 1
+        WHERE sh_sys.system = :system
         ORDER BY sh.id ASC";
         
         $get_all_sheeps_query = $this->db->prepare($get_all_sheeps);
-        $get_all_sheeps_query->execute(array(':id' => $this->id));
+        $get_all_sheeps_query->execute(array(':system' => $this->system));
         while ($row = $get_all_sheeps_query->fetch(PDO::FETCH_ASSOC)) {
             // Adding the row to the array
             $return['sheep'][] = $row;
