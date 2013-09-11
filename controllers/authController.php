@@ -98,6 +98,8 @@ class AuthController extends REST {
                     $get_system_query->execute(array(':id' => $this->id));
                     $system = $get_system_query->fetch(PDO::FETCH_ASSOC);
                     
+                    // Get number of notifications!
+                    
                     // Returning successful message to user with the new access_token
                     $ret = array('access_token' => $access_token, 'user_id' => $row['id'], 'system_id' => $system['id'], 'system_name' => $system['name']);
                 }
