@@ -30,7 +30,7 @@ class NotificationController extends REST {
     //
         
     protected function get_notification () {
-        return $this->notification_page(0,20);
+        return $this->get_notification_page(0,20);
     }
     
     protected function get_notification_page($page, $num) {
@@ -67,11 +67,26 @@ class NotificationController extends REST {
     }
     
     protected function get_notification_dropdown() {
-        return $this->notification_page(0,7);
+        return $this->get_notification_page(0,7);
     }
     
     protected function get_notification_num() {
-        // TODO
+        // Get number of unread notifications
+        $get_notifications = "SELECT COUNT(id) as 'num_notifications'
+        FROM notification
+        WHERE system = :system
+        AND is_read = 0";
+        $get_notifications_query = $this->db->prepare($get_notifications);
+        $get_notifications_query->execute(array(':system' => $this->system));
+        $notifications = $get_notifications_query->fetch(PDO::FETCH_ASSOC);
+        
+        // Fix the number if the query returned null
+        if ($notifications['num_notifications'] == null) {
+            $notifications['num_notifications'] = 0;
+        }
+                    
+        // Returning successful message to user with the new access_token
+        return array('notifications' => $notifications['num_notifications']);
     }
 }
 
