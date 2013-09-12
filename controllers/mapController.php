@@ -2,7 +2,7 @@
 /*
  * File: mapController.php
  * Holds: The mapController-class with all the methods for the map related calls
- * Last updated: 11.09.13
+ * Last updated: 12.09.13
  * Project: Prosjekt1
  * 
 */
