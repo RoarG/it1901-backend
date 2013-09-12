@@ -41,6 +41,12 @@ class REST {
         
         // Map
         '/map' => 'map', // GET
+        '/map/(:id)' => 'map_highlight', // GET
+        
+        // Notification
+        '/notification' => 'notification', // GET
+        '/notification/(:id)' => 'notification_page', // GET
+        
     );
 
     private $ignore_no_at = array(
