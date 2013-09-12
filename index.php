@@ -98,6 +98,8 @@ class Loader {
         // Initiate template-fetcher
         if (isset($_GET['tpl'])) {
             // We are requesting a template
+            $template_fetcher = new TemplateFetcher();
+            $this->response['tpl'] = $template_fetcher->get($_GET['tpl']);
         }
 
         // If we have an response already, it's an error, display it
