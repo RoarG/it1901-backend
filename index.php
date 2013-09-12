@@ -31,6 +31,7 @@ header('Content-Type: application/json; charset=utf-8');
 //
 
 require_once 'rest.php';
+require_once 'template_fetcher.php';
 require_once 'lib/rand/rand.php';
 require_once 'lib/password_hash/password_hash.php';
 
@@ -92,6 +93,11 @@ class Loader {
                     $this->setReponseState(115,'Unknown method');
                 }
             }
+        }
+        
+        // Initiate template-fetcher
+        if (isset($_GET['tpl'])) {
+            // We are requesting a template
         }
 
         // If we have an response already, it's an error, display it
