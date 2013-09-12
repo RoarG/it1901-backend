@@ -40,6 +40,10 @@ class TemplateFetcher {
         $this->base = dirname(__FILE__).'/templates/';
     }
     
+    //
+    // Get
+    //
+    
     public function get($tpl) {
         // Variable for returning the content
         $ret = array();
