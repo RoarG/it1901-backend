@@ -29,16 +29,49 @@ class NotificationController extends REST {
     // Api-methods
     //
         
-    protected function notification () {
+    protected function get_notification () {
         return $this->notification_page(0,20);
     }
     
-    protected function notification_page($page, $num) {
-        // TODO
+    protected function get_notification_page($page, $num) {
+        // Defining return-array
+        $ret = array();
+        $ret['sheep'] = array();
+        
+        // Getting all sheeps with positions for the current system
+        $get_all_position = "SELECT sh.id, sh.identification, sh.lat, sh.lng, sh.alive
+        FROM sheep sh 
+        LEFT JOIN system_sheep AS sh_sys ON sh_sys.sheep = sh.id
+        WHERE sh_sys.system = :system
+        ORDER BY sh.id ASC";
+        
+        $get_all_position_query = $this->db->prepare($get_all_position);
+        $get_all_position_query->execute(array(':system' => $this->system));
+        while ($row = $get_all_position_query->fetch(PDO::FETCH_ASSOC)) {
+            // Checking if highlighed
+            if ($highlight != null and $highlight == $row['id']) {
+                $row['highlight'] = 1;
+                $ret['center'] = array('lat' => $row['lat'], 'lng' => $row['lng']);
+            }
+            
+            // Adding the row to the array
+            $ret['sheep'][] = $row;
+        }
+        
+        // Generate center if there are no highlighted sheep
+        if (!isset($ret['center'])) {
+            $ret['center'] = $this->find_center($ret['sheep']);
+        }
+        
+        return $ret;
     }
     
-    protected function notification_dropdown() {
+    protected function get_notification_dropdown() {
         return $this->notification_page(0,7);
+    }
+    
+    protected function get_notification_num() {
+        // TODO
     }
 }
 
