@@ -59,25 +59,6 @@ class MapController extends REST {
         // Returning everything
         return array('lat' => (string)($lo * (180 / M_PI)), 
                      'lng' => (string)($la * (180 / M_PI)));
-        /*
-        
-        x = 0
-    y = 0
-    z = 0
- 
-    for lat, lon in geolocations:
-        lat = float(lat)
-        lon = float(lon)
-        x += cos(lat) * cos(lon)
-        y += cos(lat) * sin(lon)
-        z += sin(lat)
- 
-    x = float(x / len(geolocations))
-    y = float(y / len(geolocations))
-    z = float(z / len(geolocations))
- 
-    return (atan2(y, x), atan2(z, sqrt(x * x + y * y)))
-    */
     }
     
     //
