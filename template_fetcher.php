@@ -12,24 +12,58 @@ class TemplateFetcher {
     //
     // Internal variables
     //
+    
+    private $base;
+    
+    //
+    // Routes used to fetch templates
+    //
 
     private $routes = array(
-        //
+        // Login
         'login' => array(
-            'base' => 'login_base.html',
-            ),
-        );
+            'base' => 'base.html'
+        ),
+             
+        // Todo
+        'home' => array(
+            'base' => 'base.html'
+        )
+    );
 
     //
     // Constructor
     //
 
     public function __construct() {
-        // TODO
+        // Setting the correct path
+        $this->base = dirname(__FILE__).'/templates/';
     }
     
     public function get($tpl) {
-        return $tpl;
+        // Variable for returning the content
+        $ret = array();
+        
+        // Checking if route exists
+        if (array_key_exists($tpl, $this->routes)) {
+            // Fetching the right collection of templates
+            $fetch = $this->routes['login'];
+            
+            // Looping all the templates for this route
+            foreach ($fetch as $k => $v) {
+                // Storing the current file with full path and everything
+                $current_file = $this->base.$tpl.'/'.$v;
+                
+                // Checking if the template exists
+                if (file_exists($current_file)) {
+                    // Getting content from file and put it in the returning array
+                    $ret[$k] = file_get_contents($current_file);
+                }
+            }
+        }
+        
+        // Return content to the api
+        return $ret;
     }
 }
 ?>
