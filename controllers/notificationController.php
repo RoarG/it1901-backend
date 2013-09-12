@@ -26,50 +26,73 @@ class NotificationController extends REST {
     }
     
     //
-    // Api-methods
+    // Actually getting the notifications speficied by different page and limit-values
     //
-        
-    protected function get_notification () {
-        return $this->get_notification_page(0,20);
-    }
     
-    protected function get_notification_page($page, $num) {
+    private function notifications($page, $num) {
+        // Array for containing unread notifications
+        $unread = array();
+        
         // Defining return-array
         $ret = array();
-        $ret['sheep'] = array();
+        $ret['notifications'] = array();
+        
+        // Calculating the offset
+        $offset = ($page - 1) * $num;
         
         // Getting all sheeps with positions for the current system
-        $get_all_position = "SELECT sh.id, sh.identification, sh.lat, sh.lng, sh.alive
-        FROM sheep sh 
-        LEFT JOIN system_sheep AS sh_sys ON sh_sys.sheep = sh.id
-        WHERE sh_sys.system = :system
-        ORDER BY sh.id ASC";
+        $get_notifications = "SELECT *
+        FROM notification 
+        WHERE system = :system
+        ORDER BY sent DESC
+        LIMIT ".$offset.", ".$num."";
         
-        $get_all_position_query = $this->db->prepare($get_all_position);
-        $get_all_position_query->execute(array(':system' => $this->system));
-        while ($row = $get_all_position_query->fetch(PDO::FETCH_ASSOC)) {
-            // Checking if highlighed
-            if ($highlight != null and $highlight == $row['id']) {
-                $row['highlight'] = 1;
-                $ret['center'] = array('lat' => $row['lat'], 'lng' => $row['lng']);
+        $get_notifications_query = $this->db->prepare($get_notifications);
+        $get_notifications_query->execute(array(':system' => $this->system));
+        while ($row = $get_notifications_query->fetch(PDO::FETCH_ASSOC)) {
+            if ($row['is_read'] == 0) {
+                $unread[] = '('.$row['id'].',1)';
             }
             
             // Adding the row to the array
-            $ret['sheep'][] = $row;
+            $ret['notifications'][] = $row;
         }
         
-        // Generate center if there are no highlighted sheep
-        if (!isset($ret['center'])) {
-            $ret['center'] = $this->find_center($ret['sheep']);
+        // Checking to see if we have unread notifications
+        if (count($unread) > 0) {
+            // Set the notifications to read
+            $update_read = "INSERT INTO notification
+            (id, is_read)
+            VALUES ".implode(',',$unread)."
+            ON DUPLICATE KEY UPDATE is_read=VALUES(is_read)";
+            
+            $update_read_query = $this->db->prepare($update_read);
+            $update_read_query->execute();
         }
         
         return $ret;
     }
     
-    protected function get_notification_dropdown() {
-        return $this->get_notification_page(0,7);
+    //
+    // Api-methods
+    //
+    
+    // Getting the first 20 notifications
+    protected function get_notification () {
+        return $this->notifications(1,20);
     }
     
+    // Getting 20 notifications with pagination
+    protected function get_notification_page($page) {
+        return $this->notifications($page,20);
+    }
+    
+    // Getting the last 7 notifications (for the notification dropdownmenu)
+    protected function get_notification_dropdown() {
+        return $this->notifications(1,7);
+    }
+    
+    // Returning the number of unread notifications
     protected function get_notification_num() {
         // Get number of unread notifications
         $get_notifications = "SELECT COUNT(id) as 'num_notifications'
