@@ -64,10 +64,7 @@ class Loader {
 
     public function __construct() {
         // Checking wether the path is set or not
-        if (!isset($_GET['q'])) {
-            $this->setReponseState(115,'Unknown method');
-        }
-        else {
+        if (isset($_GET['q'])) {
             // We have a path, find the base-path to include the correct script
             if (strpos($_GET['q'],'/') !== false) {
                 $path_split = explode('/',$_GET['q']);
