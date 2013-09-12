@@ -33,7 +33,7 @@ class REST {
         '/auth' => 'auth', // GET, PUT
         
         // User
-        // TODO
+        '/user' => 'user', // GET, PUT
         
         // Sheep
         '/sheep' => 'sheep', // GET
@@ -46,6 +46,9 @@ class REST {
         // Notification
         '/notification' => 'notification', // GET
         '/notification/(:id)' => 'notification_page', // GET
+        
+        // Log
+        '/log' => 'log', // GET
         
     );
 
