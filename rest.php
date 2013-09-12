@@ -360,6 +360,19 @@ class REST {
         // Returning the final parsing
         return array('sql_qry' => $sql_qry, 'execute_arr' => $execute_arr);
     }
+    
+    //
+    // Entering an log-entry to the database
+    //
+    
+    protected function log($text) {
+        $log = "INSERT INTO log
+        (system, sent, text)
+        VALUES (:system, '".time()."',:text)";
+
+        $log_query = $this->db->prepare($log);
+        $log_query->execute(array(':system' => $this->system, ':text' => $text));
+    }
 
     //
     // Printing the reponse
