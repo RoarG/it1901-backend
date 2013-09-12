@@ -46,6 +46,7 @@ class REST {
         // Notification
         '/notification' => 'notification', // GET
         '/notification/(:id)' => 'notification_page', // GET
+        '/notification/dropdown' => 'notification_dropdown', // GET
         
         // Log
         '/log' => 'log', // GET
