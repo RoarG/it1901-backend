@@ -2,7 +2,7 @@
 /*
  * File: rest.php
  * Holds: The REST-api with all its methods minus the actual api-methods being called
- * Last updated: 10.09.13
+ * Last updated: 12.09.13
  * Project: Prosjekt1
  * 
 */
@@ -21,7 +21,8 @@ class REST {
     protected $db; // The PDO-wrapper
     protected $response = array(); // The response to be coded to json
     protected $id; // Holds the current user's id
-    protected $methodUrl;
+    protected $system; // Holds the current system id
+    protected $method_url;
 
     //
     // Defining the different paths, methods nd what calls don't need an access_token
@@ -30,6 +31,27 @@ class REST {
     private $path = array(
         // Auth
         '/auth' => 'auth', // GET, PUT
+        
+        // User
+        '/user' => 'user', // GET, PUT
+        
+        // Sheep
+        '/sheep' => 'sheep', // GET
+        '/sheep/(:id)' => 'sheep_single', // GET, PUT, DELETE, POST
+        
+        // Map
+        '/map' => 'map', // GET
+        '/map/(:id)' => 'map_highlight', // GET
+        
+        // Notification
+        '/notification' => 'notification', // GET
+        '/notification/(:id)' => 'notification_page', // GET
+        '/notification/dropdown' => 'notification_dropdown', // GET
+        '/notification/num' => 'notification_num', // GET
+        
+        // Log
+        '/log' => 'log', // GET
+        
     );
 
     private $ignore_no_at = array(
@@ -62,7 +84,7 @@ class REST {
 
     private function doAuth() {
         // Decode and prettify the method being requested
-        $this->methodUrl = $this->getMethodUrl();
+        $this->method_url = $this->getMethodUrl();
         
         if (!isset($_GET['method'])) {
             // No method-type has been decleared, returning error
@@ -70,15 +92,15 @@ class REST {
         }
         else {
             // Checking to see if we are dealing with an ignore-case
-            if (array_key_exists($this->methodUrl['real'], $this->ignore_no_at)) {
-                if ($this->ignore_no_at[$this->methodUrl['real']] == '*') {
+            if (array_key_exists($this->method_url['real'], $this->ignore_no_at)) {
+                if ($this->ignore_no_at[$this->method_url['real']] == '*') {
                     // Ignore all method-types
                     $this->doRequest();
                 }
                 else {
-                    if (strpos($this->ignore_no_at[$this->methodUrl['real']],',') !== false) {
+                    if (strpos($this->ignore_no_at[$this->method_url['real']],',') !== false) {
                         // This ignore-case has several ignore-methods, explode it and check for the one being called
-                        $ignore_methods = explode(',',$this->ignore_no_at[$this->methodUrl['real']]);
+                        $ignore_methods = explode(',',$this->ignore_no_at[$this->method_url['real']]);
                         $ignore_was_found = false;
 
                         // Itterate over the ignore-methods
@@ -108,7 +130,7 @@ class REST {
                     }
                     else {
                         // This ignore-case only has one ignore-method, check to see if it matches the one being called or return error otherwise
-                        if ($this->ignore_no_at[$this->methodUrl['real']] == $_GET['method']) {
+                        if ($this->ignore_no_at[$this->method_url['real']] == $_GET['method']) {
                             $this->doRequest();
                         }
                         else {
@@ -154,7 +176,22 @@ class REST {
         $row = $get_token_query->fetch(PDO::FETCH_ASSOC);
 
         if (isset($row['id']) and strlen($row['id']) > 0) {
+            // Storing the current userid
             $this->id = $row['id'];
+            
+            // Load the current system and store the id for later
+            $get_system = "SELECT sys.id
+            FROM system sys
+            LEFT JOIN system_user sys_usr ON sys_usr.system = sys.id
+            WHERE sys_usr.user = :user_id";
+            
+            $get_system_query = $this->db->prepare($get_system);
+            $get_system_query->execute(array(':user_id' => $this->id));
+            $sys = $get_system_query->fetch(PDO::FETCH_ASSOC);
+            
+            // Storing the current systemid
+            $this->system = $sys['id'];
+            
             $this->doRequest();
         }
         else {
@@ -171,19 +208,19 @@ class REST {
         // Only continue if we are dealing with the correct types of method-types
         if ($_GET['method'] == 'get' || $_GET['method'] == 'post' || $_GET['method'] == 'put' || $_GET['method'] == 'delete') {
             // We're good to go, continuing the request. Checking if the method exsists #1
-            if (array_key_exists($this->methodUrl['real'], $this->path)) {
-                $method_name = strtolower($_GET['method']).'_'.$this->path[$this->methodUrl['real']];
+            if (array_key_exists($this->method_url['real'], $this->path)) {
+                $method_name = strtolower($_GET['method']).'_'.$this->path[$this->method_url['real']];
 
                 // Checking if the method exsists #2
                 if (method_exists($this->className,$method_name)) {
                     // Check to see if we have the required number of arguments represented
                     $ReflectionClass = new ReflectionClass($this->className);
-                    if ($ReflectionClass->getMethod($method_name)->getNumberOfParameters() == count($this->methodUrl['args'])) {
+                    if ($ReflectionClass->getMethod($method_name)->getNumberOfParameters() == count($this->method_url['args'])) {
                         // Setting the rest of the response-codes
                         $this->setReponseState(200, 'ok');
 
                         // The request goes into the response-element
-                        $this->response['response'] = call_user_func_array(array($this, $method_name), $this->methodUrl['args']);
+                        $this->response['response'] = call_user_func_array(array($this, $method_name), $this->method_url['args']);
                     }
                     else {
                         // We're missing arguments for the function
@@ -325,6 +362,19 @@ class REST {
         // Returning the final parsing
         return array('sql_qry' => $sql_qry, 'execute_arr' => $execute_arr);
     }
+    
+    //
+    // Entering an log-entry to the database
+    //
+    
+    protected function log($text) {
+        $log = "INSERT INTO log
+        (system, sent, text)
+        VALUES (:system, '".time()."',:text)";
+
+        $log_query = $this->db->prepare($log);
+        $log_query->execute(array(':system' => $this->system, ':text' => $text));
+    }
 
     //
     // Printing the reponse
@@ -358,7 +408,7 @@ class REST {
         }
         
         // The insert
-        $sql = "INSERT INTO log
+        $sql = "INSERT INTO sys_log
         (user, method, call_url, url, time, user_agent, get, post, response)
         VALUES (:user, :method, :call, :url, NOW(), :user_agent, :get, :post, :response)";
         $statement = $this->db->prepare($sql);

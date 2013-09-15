@@ -2,7 +2,7 @@
 /*
  * File: index.php
  * Holds: The Loader-class that loads the correct class based on the method being called, setting output and including all the stuff we need
- * Last updated: 10.09.13
+ * Last updated: 12.09.13
  * Project: Prosjekt1
  * 
 */
@@ -31,6 +31,7 @@ header('Content-Type: application/json; charset=utf-8');
 //
 
 require_once 'rest.php';
+require_once 'template_fetcher.php';
 require_once 'lib/rand/rand.php';
 require_once 'lib/password_hash/password_hash.php';
 
@@ -63,10 +64,7 @@ class Loader {
 
     public function __construct() {
         // Checking wether the path is set or not
-        if (!isset($_GET['q'])) {
-            $this->setReponseState(115,'Unknown method');
-        }
-        else {
+        if (isset($_GET['q'])) {
             // We have a path, find the base-path to include the correct script
             if (strpos($_GET['q'],'/') !== false) {
                 $path_split = explode('/',$_GET['q']);
@@ -92,6 +90,13 @@ class Loader {
                     $this->setReponseState(115,'Unknown method');
                 }
             }
+        }
+        
+        // Initiate template-fetcher
+        if (isset($_GET['tpl'])) {
+            // We are requesting a template
+            $template_fetcher = new TemplateFetcher();
+            $this->response['tpl'] = $template_fetcher->get($_GET['tpl']);
         }
 
         // If we have an response already, it's an error, display it
