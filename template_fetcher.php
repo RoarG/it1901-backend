@@ -61,7 +61,7 @@ class TemplateFetcher {
                 // Checking if the template exists
                 if (file_exists($current_file)) {
                     // Getting content from file and put it in the returning array
-                    $ret[$k] = file_get_contents($current_file);
+                    $ret[$k] = preg_replace('/[ \t]+/', ' ', preg_replace('/[\r\n]+/', '', file_get_contents($current_file))); // http://stackoverflow.com/a/6394462/921563
                 }
             }
         }
