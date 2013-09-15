@@ -2,7 +2,7 @@
 /*
  * File: index.php
  * Holds: The Loader-class that loads the correct class based on the method being called, setting output and including all the stuff we need
- * Last updated: 12.09.13
+ * Last updated: 16.09.13
  * Project: Prosjekt1
  * 
 */
@@ -101,6 +101,11 @@ class Loader {
 
         // If we have an response already, it's an error, display it
         if (count($this->response) > 0) {
+            echo json_encode($this->response);
+        }
+        
+        // If there is no api-method or tpl requested, output empty json-string
+        if (!isset($_GET['tpl']) and !isset($_GET['q'])) {
             echo json_encode($this->response);
         }
     }
