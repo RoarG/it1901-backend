@@ -45,23 +45,42 @@ class TemplateFetcher {
     //
     
     public function get($tpl) {
+        // Holding the template(s) we want to get
+        $tpls = array();
+        
         // Variable for returning the content
         $ret = array();
         
-        // Checking if route exists
-        if (array_key_exists($tpl, $this->routes)) {
-            // Fetching the right collection of templates
-            $fetch = $this->routes['login'];
-            
-            // Looping all the templates for this route
-            foreach ($fetch as $k => $v) {
-                // Storing the current file with full path and everything
-                $current_file = $this->base.$tpl.'/'.$v;
+        // Check if we are loading more than one template
+        if (strpos($tpl,',') === false) {
+            // Only one template
+            $tpls[] = $tpl;
+        }
+        else {
+            // Multiple templates
+            $tpls = explode(',',$tpl);
+        }
+        
+        // Loop all the templates
+        foreach ($tpls as $template) {
+            // Checking if route exists
+            if (array_key_exists($template, $this->routes)) {
+                // Fetching the right collection of templates
+                $fetch = $this->routes['login'];
                 
-                // Checking if the template exists
-                if (file_exists($current_file)) {
-                    // Getting content from file and put it in the returning array
-                    $ret[$k] = preg_replace('/[ \t]+/', ' ', preg_replace('/[\r\n]+/', '', file_get_contents($current_file))); // http://stackoverflow.com/a/6394462/921563
+                // Looping all the templates for this route
+                foreach ($fetch as $k => $v) {
+                    // Storing the current file with full path and everything
+                    $current_file = $this->base.$template.'/'.$v;
+                    
+                    // Checking if the template exists
+                    if (file_exists($current_file)) {
+                        // Getting content from file and put it in the returning array
+                        $output = preg_replace('/[ \t]+/', ' ', preg_replace('/[\r\n]+/', '', file_get_contents($current_file))); // http://stackoverflow.com/a/6394462/921563
+                        
+                        // Return the output
+                        $ret[$template][$k] = $output;
+                    }
                 }
             }
         }
