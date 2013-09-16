@@ -2,7 +2,7 @@
 /*
  * File: run.php
  * Holds: Method to initiate the different controllers dynamically
- * Last updated: 10.09.13
+ * Last updated: 16.09.13
  * Project: Prosjekt1
  * 
 */
@@ -14,7 +14,7 @@ $name = explode('.',$path[count($path)-1]);
 $classToCall = ucfirst($name[0]);
 
 // Creating a new instance
-$controller = new $classToCall();
+$controller = new $classToCall($this->getResponse());
 
 // Logging
 $controller->doLog();

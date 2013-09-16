@@ -2,7 +2,7 @@
 /*
  * File: rest.php
  * Holds: The REST-api with all its methods minus the actual api-methods being called
- * Last updated: 12.09.13
+ * Last updated: 16.09.13
  * Project: Prosjekt1
  * 
 */
@@ -31,6 +31,7 @@ class REST {
     private $path = array(
         // Auth
         '/auth' => 'auth', // GET, PUT
+        '/auth/validate' => 'auth_validate', // GET
         
         // User
         '/user' => 'user', // GET, PUT
@@ -62,7 +63,10 @@ class REST {
     // Constructor
     //
 
-    public function __construct() {
+    public function __construct($response) {
+        // Setting initial response
+        $this->response = $response;
+        
         // Trying to connect to the database
         try {
             $this->db = new PDO("mysql:host=".DATABASE_HOST.";dbname=".DATABASE_TABLE, DATABASE_USER, DATABASE_PASSWORD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));

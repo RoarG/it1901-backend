@@ -2,7 +2,7 @@
 /*
  * File: sheepController.php
  * Holds: The sheepController-class with all the methods for the sheep-calls
- * Last updated: 11.09.13
+ * Last updated: 16.09.13
  * Project: Prosjekt1
  * 
 */
@@ -17,12 +17,12 @@ class SheepController extends REST {
     // The constructor for this subclass
     //
 
-    public function __construct() {
+    public function __construct($response) {
         // Loading the class-name, setting it in the REST-class, so we can check if it holds the method being called
         $this->className = get_class($this);
 
         // Calling RESTs constructor
-        parent::__construct();
+        parent::__construct($response);
     }
 
     //

@@ -63,6 +63,13 @@ class Loader {
     //
 
     public function __construct() {
+        // Initiate template-fetcher
+        if (isset($_GET['tpl'])) {
+            // We are requesting a template
+            $template_fetcher = new TemplateFetcher();
+            $this->response['tpl'] = $template_fetcher->get($_GET['tpl']);
+        }
+        
         // Checking wether the path is set or not
         if (isset($_GET['q'])) {
             // We have a path, find the base-path to include the correct script
@@ -77,6 +84,7 @@ class Loader {
             // If the final path something, test to see if it matches a controller
             if (strlen($path) == 0) {
                 $this->setReponseState(115,'Unknown method');
+                $this->printResponse();
             }
             else {
                 // Constructing the path and filename, removing dots and slashes to prevent hacking
@@ -88,25 +96,13 @@ class Loader {
                 }
                 else {
                     $this->setReponseState(115,'Unknown method');
+                    $this->printResponse();
                 }
             }
         }
-        
-        // Initiate template-fetcher
-        if (isset($_GET['tpl'])) {
-            // We are requesting a template
-            $template_fetcher = new TemplateFetcher();
-            $this->response['tpl'] = $template_fetcher->get($_GET['tpl']);
-        }
-
-        // If we have an response already, it's an error, display it
-        if (count($this->response) > 0) {
-            echo json_encode($this->response);
-        }
-        
-        // If there is no api-method or tpl requested, output empty json-string
-        if (!isset($_GET['tpl']) and !isset($_GET['q'])) {
-            echo json_encode($this->response);
+        else {
+            // Just outputting whatever we have by now
+            $this->printResponse();
         }
     }
 
@@ -117,6 +113,22 @@ class Loader {
     private function setReponseState($c,$msg) {
         $this->response['code'] = $c;
         $this->response['msg'] = $msg;
+    }
+    
+    //
+    // Returning the response
+    //
+    
+    public function getResponse() {
+        return $this->response;
+    }
+    
+    //
+    //
+    //
+    
+    private function printResponse() {
+        echo json_encode($this->response);
     }
 }
 
