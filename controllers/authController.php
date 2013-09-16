@@ -131,9 +131,39 @@ class AuthController extends REST {
         return $ret;
     }
     
-    // Empty method for validating an access_token
+    // Method for validating an access_token and returning important information
     protected function get_auth_validate() {
-        return;
+        // Variable for returning values
+        $ret = array();
+        
+        // Loading information about the current system
+        $get_system = "SELECT sys.id, sys.name
+        FROM system sys
+        LEFT JOIN system_user sys_usr ON sys_usr.system = sys.id
+        WHERE sys_usr.user = :id";
+        $get_system_query = $this->db->prepare($get_system);
+        $get_system_query->execute(array(':id' => $this->id));
+        $system = $get_system_query->fetch(PDO::FETCH_ASSOC);
+        
+        // Get number of unread notifications
+        $get_notifications = "SELECT COUNT(id) as 'num_notifications'
+        FROM notification
+        WHERE system = :system
+        AND is_read = 0";
+        $get_notifications_query = $this->db->prepare($get_notifications);
+        $get_notifications_query->execute(array(':system' => $system['id']));
+        $notifications = $get_notifications_query->fetch(PDO::FETCH_ASSOC);
+        
+        // Fix the number if the query returned null
+        if ($notifications['num_notifications'] == null) {
+            $notifications['num_notifications'] = 0;
+        }
+        
+        // Returning successful message to user with the new access_token
+        $ret = array('user_id' => $this->id, 'system_id' => $system['id'], 'system_name' => $system['name'], 'notifications' => $notifications['num_notifications']);
+        
+        // Returning
+        return $ret;
     }
 }
 
