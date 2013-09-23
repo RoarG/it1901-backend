@@ -2,7 +2,7 @@
 /*
  * File: sheepController.php
  * Holds: The sheepController-class with all the methods for the sheep-calls
- * Last updated: 16.09.13
+ * Last updated: 24.09.13
  * Project: Prosjekt1
  * 
 */
@@ -90,7 +90,7 @@ class SheepController extends REST {
         AND system_sheep.sheep = :id";
         
         $delete_sheep_query = $this->db->prepare($delete_sheep);
-        $delete_sheep_query->execute(array(':system' => $this->system, ':id' => $id));
+        //$delete_sheep_query->execute(array(':system' => $this->system, ':id' => $id));
         
         return true;
     }
