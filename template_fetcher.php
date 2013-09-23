@@ -25,9 +25,15 @@ class TemplateFetcher {
             'base' => 'base.html'
         ),
              
-        // Todo
+        // Home
         'home' => array(
             'base' => 'base.html'
+        ),
+        
+        // Sheep-all
+        'sheep-all' => array(
+            'base' => 'base.html',
+            'row' => 'row.html',
         )
     );
 
@@ -66,7 +72,7 @@ class TemplateFetcher {
             // Checking if route exists
             if (array_key_exists($template, $this->routes)) {
                 // Fetching the right collection of templates
-                $fetch = $this->routes['login'];
+                $fetch = $this->routes[$template];
                 
                 // Looping all the templates for this route
                 foreach ($fetch as $k => $v) {
