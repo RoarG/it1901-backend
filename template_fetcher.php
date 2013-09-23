@@ -36,6 +36,11 @@ class TemplateFetcher {
             'row' => 'row.html',
         ),
         
+        // Sheel_single
+        'sheep_single' => array(
+            'base' => 'base.html',
+        ),
+        
         // Sheep_map
         'sheep_map' => array(
             'base' => 'base.html',
