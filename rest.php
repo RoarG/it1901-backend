@@ -2,7 +2,7 @@
 /*
  * File: rest.php
  * Holds: The REST-api with all its methods minus the actual api-methods being called
- * Last updated: 16.09.13
+ * Last updated: 24.09.13
  * Project: Prosjekt1
  * 
 */
@@ -52,6 +52,9 @@ class REST {
         
         // Log
         '/log' => 'log', // GET
+        
+        // Contact
+        '/contact' => 'contact', // GET, PUT
         
     );
 
