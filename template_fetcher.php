@@ -40,6 +40,11 @@ class TemplateFetcher {
         'sheep_map' => array(
             'base' => 'base.html',
         ),
+        
+        // Sheep_add
+        'sheep_add' => array(
+            'base' => 'base.html',
+        ),
     );
 
     //
