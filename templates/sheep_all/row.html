@@ -2,7 +2,7 @@
     _.each(items,function(item,key,list) {
 %>
 <li data-alive="<%= item.alive %>">
-    <a class="sheep-single-view" href="#" data-id="<%= item.id %>"><%= item.identification %> (<%= item.id %>)</a>
+    <%= item.identification %> (<%= item.id %>)<div class="image-overlay"><a class="sheep-single-view" href="#" data-id="<%= item.id %>"><img src="assets/css/gfx/blank2x2.png" alt="" height="105" width="583" /></a></div></li>
 </li>
 <%
     });
