@@ -30,11 +30,16 @@ class TemplateFetcher {
             'base' => 'base.html'
         ),
         
-        // Sheep-all
+        // Sheep_all
         'sheep_all' => array(
             'base' => 'base.html',
             'row' => 'row.html',
-        )
+        ),
+        
+        // Sheep_map
+        'sheep_map' => array(
+            'base' => 'base.html',
+        ),
     );
 
     //
