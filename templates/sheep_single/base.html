@@ -4,16 +4,29 @@
             <h2><%= name %></h2>
         </div>
         <div class="block-body block-text">
-            <p>Identification:  <%= identification %></p>
-            <p>Name:  <%= name %></p>
-            <p>Birthday:  <%= birthday %></p>
-            <p>Weight:  <%= weight %></p>
-            <p>Vaccine:  <%= vaccine %></p>
-            <p>Comment:  <%= comment %></p>
-            <p>Last update:  <%= last_updated %></p>
-            <p>Last position:  <%= lat %>, <%= lng %></p>
-            
-            <a href="#" id="sheep_single_edit" data-id="<%= id %>">Rediger</a> | <a href="#" id="sheep_single_delete" data-id="<%= id %>">Slett</a>
+            <p><b>Identifikasjon:</b> #<%= identification %></p>
+            <p><b>Navn:</b> <%= name %></p>
+            <p><b>Bursdag:</b> <%= birthday %></p>
+            <p><b>Vekt:</b> <%= weight %></p>
+            <p><b>Veksinert:</b> <%= vaccine %></p>
+            <p><b>Siste oppdatering:</b> <%= last_updated %></p>
+            <p><b>Siste posisjon:</b> <%= lat %>, <%= lng %></p>
+        </div>
+    </div>
+    <div class="block">
+        <div class="block-top">
+            <h2>Kommentar</h2>
+        </div>
+        <div class="block-body block-text">
+           <%= comment %>
+        </div>
+    </div>
+    <div class="block">
+        <div class="block-top">
+            <h2>Valg</h2>
+        </div>
+        <div class="block-body block-text">
+            <a href="#" id="sheep_single_map" data-id="<%= id %>">Vis på kart</a> | a href="#" id="sheep_single_edit" data-id="<%= id %>">Rediger</a> | <a href="#" id="sheep_single_delete" data-id="<%= id %>">Slett</a>
         </div>
     </div>
 </div>
