@@ -31,7 +31,7 @@ class TemplateFetcher {
         ),
         
         // Sheep-all
-        'sheep-all' => array(
+        'sheep_all' => array(
             'base' => 'base.html',
             'row' => 'row.html',
         )
