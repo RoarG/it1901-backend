@@ -76,6 +76,25 @@ class SheepController extends REST {
         
         return $row;
     }
+    
+    // Delete sheep with the provided id
+    protected function delete_sheep_single($id) {
+        // Defining return-array
+        $ret = array();
+        
+        // Get information about one sheep (if it exists)
+        $delete_sheep = "DELETE sheep, system_sheep
+        FROM sheep, system_sheep
+        WHERE system_sheep.sheep = sheep.id
+        AND system_sheep.system = :system
+        AND system_sheep.sheep = :id";
+        
+        $delete_sheep_query = $this->db->prepare($delete_sheep);
+        $delete_sheep_query->execute(array(':system' => $this->system, ':id' => $id));
+        
+        return true;
+    }
+
 }
 
 //
