@@ -2,7 +2,7 @@
     _.each(items,function(item,key,list) {
 %>
 <li data-alive="<%= item.alive %>">
-    <a href="#" data-sheep="<%= item.id %>"><%= item.identification %> (<%= item.id %>)</a>
+    <a class="sheep-single-view" href="#" data-id="<%= item.id %>"><%= item.identification %> (<%= item.id %>)</a>
 </li>
 <%
     });
