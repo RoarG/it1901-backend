@@ -45,6 +45,22 @@ class TemplateFetcher {
         'sheep_add' => array(
             'base' => 'base.html',
         ),
+        
+        // Admin_edit
+        'admin_edit' => array(
+            'base' => 'base.html',
+        ),
+        
+        // Admin_alert
+        'admin_alert' => array(
+            'base' => 'base.html',
+        ),
+        
+        // Admin_log
+        'admin_log' => array(
+            'base' => 'base.html',
+            'row' => 'row.html',
+        ),
     );
 
     //
