@@ -1,1 +1,9 @@
-<li>[[lalal]]</li>
+<%
+    _.each(items,function(item,key,list) {
+%>
+<li data-alive="<%= item.alive %>">
+    <a href="#" data-sheep="<%= item.id %>"><%= item.identification %> (<%= item.id %>)</a>
+</li>
+<%
+    });
+%>
