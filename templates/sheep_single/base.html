@@ -25,8 +25,11 @@
         <div class="block-top">
             <h2>Valg</h2>
         </div>
-        <div class="block-body block-text">
-            <a href="#" id="sheep_single_map" data-id="<%= id %>">Vis på kart</a> | <a href="#" id="sheep_single_edit" data-id="<%= id %>">Rediger</a> | <a href="#" id="sheep_single_delete" data-id="<%= id %>" data-name="<%= name %>" data-identification="<%= identification %>">Slett</a>
+        <div class="block-body block-text block-button-collection">
+            <input type="button" value="Vis på kart" data-id="<%= id %>" name="sheep_single_map" id="sheep_single_map" />
+            <input type="button" value="Rediger" data-id="<%= id %>" name="sheep_single_edit" id="sheep_single_edit" />
+            <input type="button" value="Slett" data-id="<%= id %>" data-name="<%= name %>" data-identification="<%= identification %>" name="sheep_single_delete" id="sheep_single_delete" class="right alert" />
+            <div class="clear"></div>
         </div>
     </div>
 </div>
