@@ -59,6 +59,7 @@ class TemplateFetcher {
         // Admin_alert
         'admin_alert' => array(
             'base' => 'base.html',
+            'row' => 'row.html',
         ),
         
         // Admin_log
