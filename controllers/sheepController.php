@@ -100,6 +100,9 @@ class SheepController extends REST {
                     $post_sheep_query2 = $this->db->prepare($post_sheep2);
                     $post_sheep_query2->execute(array(':system' => $this->system, ':sheep' => $new_sheep_id));
                     
+                    // Logging cration
+                    $this->log('Created sheep with id '.$id.', identification #'.$_POST['identification'].' and name '.$_POST['name']);
+                    
                     return array('id' => $new_sheep_id);
                 }
                 else {
@@ -153,6 +156,9 @@ class SheepController extends REST {
         
         $delete_sheep_query = $this->db->prepare($delete_sheep);
         $delete_sheep_query->execute(array(':system' => $this->system, ':id' => $id));
+        
+        // Logging deleting
+        $this->log('Deleted sheep #'.$id);
         
         return true;
     }
