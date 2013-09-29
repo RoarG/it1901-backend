@@ -1,7 +1,7 @@
 <%
     _.each(items,function(item,key,list) {
 %>
-<form action="" method="post" class="admin-alert-form">
+<form action="" method="post" class="admin-alert-form" data-epost="<%= item.epost %>">
     <div class="block-alert">
         <div class="head">
             <h2><%= item.name %></h2>
@@ -11,7 +11,9 @@
             </div>
         </div>
         <div class="text">
-            <p><%= item.epost %></p> <input type="submit" name="admin-alert-form-submit" class="admin-alert-form-submit" value="Slett" data-epost="<%= item.epost %>" />
+            <p><%= item.epost %></p>
+            <input type="submit" name="admin-alert-form-submit" class="admin-alert-form-submit" value="Slett" />
+            <div class="clear"></div>
         </div>
     </div>
 </form>
