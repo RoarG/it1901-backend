@@ -52,13 +52,13 @@ class ContactController extends REST {
             // Contact was supplied, just transfer the information
             $contact = $_POST['contact'];
         }
-        print_r($contact);
+        
         // The query
         $put_contact = "UPDATE system 
         SET contact = :contact 
         WHERE id = :system";
         $put_contact_query = $this->db->prepare($put_contact);
-        //$put_contact_query->execute(array(':system' => $this->system, ':contact' => json_encode($contact)));
+        $put_contact_query->execute(array(':system' => $this->system, ':contact' => json_encode($contact)));
     }
 }
 
