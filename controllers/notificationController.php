@@ -107,7 +107,7 @@ class NotificationController extends REST {
         if ($notifications['num_notifications'] == null) {
             $notifications['num_notifications'] = 0;
         }
-                    
+        
         // Returning successful message to user with the new access_token
         return array('notifications' => $notifications['num_notifications']);
     }
