@@ -101,7 +101,7 @@ class SheepController extends REST {
                     $post_sheep_query2->execute(array(':system' => $this->system, ':sheep' => $new_sheep_id));
                     
                     // Logging cration
-                    $this->log('Created sheep with id '.$id.', identification #'.$_POST['identification'].' and name '.$_POST['name']);
+                    $this->log('Created sheep with id '.$new_sheep_id.', identification #'.$_POST['identification'].' and name '.$_POST['name']);
                     
                     return array('id' => $new_sheep_id);
                 }
