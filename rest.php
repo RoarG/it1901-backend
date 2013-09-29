@@ -2,7 +2,7 @@
 /*
  * File: rest.php
  * Holds: The REST-api with all its methods minus the actual api-methods being called
- * Last updated: 24.09.13
+ * Last updated: 29.09.13
  * Project: Prosjekt1
  * 
 */
@@ -37,8 +37,8 @@ class REST {
         '/user' => 'user', // GET, PUT
         
         // Sheep
-        '/sheep' => 'sheep', // GET
-        '/sheep/(:id)' => 'sheep_single', // GET, PUT, DELETE, POST
+        '/sheep' => 'sheep', // GET, POST
+        '/sheep/(:id)' => 'sheep_single', // GET, PUT, DELETE
         
         // Map
         '/map' => 'map', // GET
@@ -329,45 +329,6 @@ class REST {
     protected function setReponseState($c,$msg) {
         $this->response['code'] = $c;
         $this->response['msg'] = $msg;
-    }
-
-    //
-    // Parsing for pdo-statement
-    //
-
-    protected function pdo_parsing($arr, $source, $querytype, $includeUserId = false) {
-        $sql_qry = "";
-        $execute_arr = array();
-
-        // Checking to see if we should append the current user-id first of all
-        if ($includeUserId) {
-            $execute_arr[':id'] = $this->id;
-        }
-
-        // Opping the source-array
-        if (count($source) > 0) {
-            foreach ($source as $k => $v) {
-                if (in_array($k,$arr)) {
-                    if ($querytype == 'update' or $querytype == 'where') {
-                        // Update
-                        $sql_qry .= $k.' = :'.$k.', ';
-                    }
-                    else if ($querytype == 'insert') {
-                        // Insert
-                        $sql_qry .= ':'.$k.', ';
-                    }
-
-                    // Setting the execute-array
-                    $execute_arr[':'.$k] = $v;
-                }
-            }
-        }
-
-        // Cleaning the final sql_qry
-        $sql_qry = substr($sql_qry,0,strlen($sql_qry)-2);
-
-        // Returning the final parsing
-        return array('sql_qry' => $sql_qry, 'execute_arr' => $execute_arr);
     }
     
     //
