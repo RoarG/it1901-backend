@@ -12,7 +12,18 @@
                 <input type="text" value="" placeholder="Navn" name="name" id="name" />
                 <input type="date" value="" placeholder="Bursdag" name="birthday" id="birthday" />
                 <input type="number" value="" placeholder="Vekt" name="weight" id="weight" />
-                <input type="number" value="" placeholder="Vaksine" name="vaccine" id="vaccine" />
+                <div class="input-dropdown"><div class="arrow"></div>
+                    <input type="hidden" value="1" name="vaccine" id="vaccine" />
+                    <div class="dropdown-head">
+                        <p>Vaksinert: Ja</p>
+                    </div>
+                    <div class="dropdown-body">
+                        <ul>
+                            <li class="active"><a href="#" data-value="1">Ja</a></li>
+                            <li class="last"><a href="#" data-value="0">Nei</a></li>
+                        </ul>
+                    </div>
+                </div>
                 <input type="number" value="" placeholder="Lat" name="lat" id="lat" />
                 <input type="number" value="" placeholder="Lng" name="lng" id="lng" />
                 <div id="login_bottom_container">
