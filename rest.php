@@ -22,7 +22,7 @@ class REST {
     protected $response = array(); // The response to be coded to json
     protected $id; // Holds the current user's id
     protected $system; // Holds the current system id
-    protected $method_url;
+    protected $method_url; // Holds the arrays with the path and method being called
 
     //
     // Defining the different paths, methods nd what calls don't need an access_token
