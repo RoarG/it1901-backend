@@ -2,7 +2,7 @@
 /*
  * File: contactController.php
  * Holds: The contactController-class with all the methods for listing and editing contacts
- * Last updated: 24.09.13
+ * Last updated: 29.09.13
  * Project: Prosjekt1
  * 
 */
@@ -38,9 +38,27 @@ class ContactController extends REST {
         $get_contact_query = $this->db->prepare($get_contact);
         $get_contact_query->execute(array(':system' => $this->system));
         $contact = $get_contact_query->fetch(PDO::FETCH_ASSOC);
-                     
+        
         // Returning the list of contacts (already an json-string)
         return array('contact' => json_decode($contact['contact']));
+    }
+    
+    // Updating the contacts for the current system
+    protected function put_contact() {
+        // Validate array
+        $contact = array();
+        
+        if (isset($_POST['contact']) and count($_POST['contact']) > 0) {
+            // Contact was supplied, just transfer the information
+            $contact = $_POST['contact'];
+        }
+        print_r($contact);
+        // The query
+        $put_contact = "UPDATE system 
+        SET contact = :contact 
+        WHERE id = :system";
+        $put_contact_query = $this->db->prepare($put_contact);
+        //$put_contact_query->execute(array(':system' => $this->system, ':contact' => json_encode($contact)));
     }
 }
 
