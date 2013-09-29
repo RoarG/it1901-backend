@@ -2,7 +2,7 @@
 /*
  * File: authController.php
  * Holds: The AuthController-class with all the methods for the auth-calls
- * Last updated: 16.09.13
+ * Last updated: 29.09.13
  * Project: Prosjekt1
  * 
 */
@@ -53,6 +53,9 @@ class AuthController extends REST {
         $reset_access_token_query = $this->db->prepare($reset_access_token);
         $reset_access_token_query->execute(array(':access_token' => $_GET['access_token']));
         
+        // Logging logout
+        $this->log('User '.$this->id.' logged out of the system.');
+        
         // Empty return here
         return true;
     }
@@ -98,13 +101,16 @@ class AuthController extends REST {
                     $get_system_query->execute(array(':id' => $this->id));
                     $system = $get_system_query->fetch(PDO::FETCH_ASSOC);
                     
+                    // Set current system-id
+                    $this->system = $system['id'];
+                    
                     // Get number of unread notifications
                     $get_notifications = "SELECT COUNT(id) as 'num_notifications'
                     FROM notification
                     WHERE system = :system
                     AND is_read = 0";
                     $get_notifications_query = $this->db->prepare($get_notifications);
-                    $get_notifications_query->execute(array(':system' => $system['id']));
+                    $get_notifications_query->execute(array(':system' => $this->system));
                     $notifications = $get_notifications_query->fetch(PDO::FETCH_ASSOC);
                     
                     // Fix the number if the query returned null
@@ -114,6 +120,9 @@ class AuthController extends REST {
                     
                     // Returning successful message to user with the new access_token
                     $ret = array('access_token' => $access_token, 'user_id' => $row['id'], 'system_id' => $system['id'], 'system_name' => $system['name'], 'notifications' => $notifications['num_notifications']);
+                    
+                    // Logging logout
+                    $this->log('User '.$this->id.' logged in.');
                 }
                 else {
                     $this->setReponseState(131, 'No such user');
