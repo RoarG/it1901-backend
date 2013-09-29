@@ -2,7 +2,7 @@
 /*
  * File: sheepController.php
  * Holds: The sheepController-class with all the methods for the sheep-calls
- * Last updated: 24.09.13
+ * Last updated: 29.09.13
  * Project: Prosjekt1
  * 
 */
@@ -52,6 +52,68 @@ class SheepController extends REST {
         return $ret;
     }
     
+    // Create new sheep
+    protected function post_sheep() {
+        // Check if all the params we need is sat
+        if ($this->checkRequiredParams(array('identification','name','birthday','weight','vaccine','lat','lng'),$_POST)) {
+            // Validate the content of the fields
+            $error = false;
+            foreach (array('identification','weight','vaccine','lat','lng') as $k) {
+                if (!is_numeric($_POST[$k])) {
+                    $error = true;
+                }
+            }
+            
+            // Check if params were numeric or not
+            if ($error) {
+                // Maleformed input
+                $this->setReponseState(182, 'Maleformed sheep-input');
+            }
+            else {
+                // Validate date
+                $date_split = explode('-',$_POST['birthday']);
+                if (strlen($date_split[0]) != 4)
+                    $error = true;
+                if (strlen($date_split[1]) != 2)
+                    $error = true;
+                if (strlen($date_split[2]) != 2)
+                    $error = true;
+                
+                // Check if date was validated correctly
+                if (!$error) {
+                    // Insert the sheep
+                    $post_sheep = "INSERT INTO sheep
+                    (identification, name, birthday, weight, vaccine, lat, lng)
+                    VALUES (:identification, :name, :birthday, :weight, :vaccine, :lat, :lng)";
+                    
+                    $post_sheep_query = $this->db->prepare($post_sheep);
+                    $post_sheep_query->execute(array(':identification' => $_POST['identification'], ':name' => $_POST['name'], ':birthday' => $_POST['birthday'], ':weight' => $_POST['weight'], ':vaccine' => $_POST['vaccine'], ':lat' => $_POST['lat'], ':lng' => $_POST['lng']));
+
+                    // Get the sheep-id
+                    $new_sheep_id = $this->db->lastInsertId();
+                    
+                    // Insert the system_sheep
+                    $post_sheep2 = "INSERT INTO system_sheep
+                    (system, sheep)
+                    VALUES (:system, :sheep)";
+                    
+                    $post_sheep_query2 = $this->db->prepare($post_sheep2);
+                    $post_sheep_query2->execute(array(':system' => $this->system, ':sheep' => $new_sheep_id));
+                    
+                    return array('id' => $new_sheep_id);
+                }
+                else {
+                    // Maleformed input
+                $this->setReponseState(182, 'Maleformed sheep-input');
+                }
+            }
+        }
+        else {
+            // Missing required params
+            $this->setReponseState(181, 'Incomplete sheep-creation');
+        }
+    }
+    
     // Get all information about one sheep
     protected function get_sheep_single($id) {
         // Defining return-array
@@ -90,11 +152,10 @@ class SheepController extends REST {
         AND system_sheep.sheep = :id";
         
         $delete_sheep_query = $this->db->prepare($delete_sheep);
-        //$delete_sheep_query->execute(array(':system' => $this->system, ':id' => $id));
+        $delete_sheep_query->execute(array(':system' => $this->system, ':id' => $id));
         
         return true;
     }
-
 }
 
 //
