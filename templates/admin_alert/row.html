@@ -1,18 +1,20 @@
 <%
     _.each(items,function(item,key,list) {
 %>
-<div class="block-alert">
-    <div class="head">
-        <h2><%= item.name %></h2>
-        <div class="arrow"></div>
-        <div class="link">
-            <a href="#"><img src="assets/css/gfx/blank2x2.png" width="581" height="79" alt="" /></a>
+<form action="" method="post" class="admin-alert-form">
+    <div class="block-alert">
+        <div class="head">
+            <h2><%= item.name %></h2>
+            <div class="arrow"></div>
+            <div class="link">
+                <a href="#"><img src="assets/css/gfx/blank2x2.png" width="581" height="79" alt="" /></a>
+            </div>
+        </div>
+        <div class="text">
+            <p><%= item.epost %></p> <input type="submit" name="admin-alert-form-submit" class="admin-alert-form-submit" value="Slett" data-epost="<%= item.epost %>" />
         </div>
     </div>
-    <div class="text">
-        <p><%= item.epost %></p> [Slett]
-    </div>
-</div>
+</form>
 <%
     });
 %>
