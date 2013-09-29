@@ -6,4 +6,34 @@
     </div>
 </div>
 <%= inner %>
-[Legg til ny]
+<div class="main-menu">
+    <div class="block">
+        <div class="block-top block-top-radius block-button">
+            <h2>Ny varsling</h2>
+            <div class="image-overlay">
+                <a id="alert-add" href="#">
+                    <img width="583" height="105" alt="" src="assets/css/gfx/blank2x2.png">
+                </a>
+            </div>
+        </div>
+        <div class="block-body hidden">
+            <form action="" method="post" name="alert-add-form" id="alert-add-form">
+                <input type="text" value="" placeholder="Navn" name="name" id="name" />
+                <div id="name_help" class="sheep_add_form_helptext"><p><b>Navn:</b> Må være minst 2 tegn langt.</p></div>
+                
+                <input type="email" value="" placeholder="Epost" name="epost" id="epost" />
+                <div id="epost_help" class="sheep_add_form_helptext"><p><b>E-post:</b> E-posten til vedkommende som skal motta varsling.</p></div>
+                
+                <div class="submit-container">
+                    <div class="submit-container-left">
+                        <p id="alert_add_error">Vennligst fyll ut felter i rødt korrekt.</p>
+                    </div>
+                    <div class="submit-container-right">
+                        <input type="submit" class="right" value="Lagre" name="alert_add_form_submit" id="alert_add_form_submit" />
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
