@@ -162,6 +162,88 @@ class SheepController extends REST {
         
         return true;
     }
+    
+    // Create new sheep
+    protected function put_sheep_single($id) {
+        // Defining return-array
+        $ret = array();
+        
+        // Get information about one sheep (if it exists)
+        $get_sheep = "SELECT sh.*
+        FROM sheep sh 
+        LEFT JOIN system_sheep AS sh_sys ON sh_sys.sheep = sh.id
+        WHERE sh_sys.system = :system
+        AND sh_sys.sheep = :id
+        ORDER BY sh.id ASC";
+        
+        $get_sheep_query = $this->db->prepare($get_sheep);
+        $get_sheep_query->execute(array(':system' => $this->system, ':id' => $id));
+        $row = $get_sheep_query->fetch(PDO::FETCH_ASSOC);
+        
+        // Checking if sheep exists
+        if (!isset($row['id'])) {
+            $this->setReponseState(141, 'No such sheep');
+        }
+        else {
+            // We have a sheep, check if required data is presented
+            if ($this->checkRequiredParams(array('identification','name','birthday','weight','vaccine','lat','lng'),$_POST)) {
+                // Validate the content of the fields
+                $error = false;
+                foreach (array('identification','weight','vaccine','lat','lng') as $k) {
+                    if (!is_numeric($_POST[$k])) {
+                        $error = true;
+                    }
+                }
+                
+                // Check if params were numeric or not
+                if ($error) {
+                    // Maleformed input
+                    $this->setReponseState(182, 'Maleformed sheep-input');
+                }
+                else {
+                    // Validate date
+                    $date_split = explode('-',$_POST['birthday']);
+                    if (strlen($date_split[0]) != 4)
+                        $error = true;
+                    if (strlen($date_split[1]) != 2)
+                        $error = true;
+                    if (strlen($date_split[2]) != 2)
+                        $error = true;
+                    
+                    // Check if date was validated correctly
+                    if (!$error) {
+                        // Insert the sheep
+                        $post_sheep = "UPDATE sheep
+                        SET identification = :identification,
+                        name = :name,
+                        birthday = :birthday,
+                        weight = :weight,
+                        vaccine = :vaccine,
+                        lat = :lat,
+                        lng = :lng,
+                        comment = :comment
+                        WHERE id = :id";
+                        
+                        $post_sheep_query = $this->db->prepare($post_sheep);
+                        $post_sheep_query->execute(array(':identification' => $_POST['identification'], ':name' => $_POST['name'], ':birthday' => $_POST['birthday'], ':weight' => $_POST['weight'], ':vaccine' => $_POST['vaccine'], ':lat' => $_POST['lat'], ':lng' => $_POST['lng'], ':comment' => $_POST['comment'], ':id' => $id));
+                        
+                        // Logging cration
+                        $this->log('Updated sheep with id '.$id.', identification #'.$_POST['identification'].' and name '.$_POST['name']);
+                        
+                        return array('id' => $id);
+                    }
+                    else {
+                        // Maleformed input
+                        $this->setReponseState(182, 'Maleformed sheep-input');
+                    }
+                }
+            }
+            else {
+                // Missing required params
+                $this->setReponseState(181, 'Incomplete sheep-creation');
+            }
+        }
+    }
 }
 
 //
