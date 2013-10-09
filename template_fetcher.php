@@ -41,6 +41,11 @@ class TemplateFetcher {
             'base' => 'base.html',
         ),
         
+        // Sheep_single_edit
+        'sheep_single_edit' => array(
+            'base' => 'base.html',
+        ),
+        
         // Sheep_map
         'sheep_map' => array(
             'base' => 'base.html',
