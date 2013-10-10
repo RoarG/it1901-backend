@@ -1,8 +1,11 @@
 <%
     _.each(items,function(item,key,list) {
 %>
-<li>
-    <%= item.name %> (#<%= item.identification %>)<div class="image-overlay"><a class="sheep-single-view" href="#" data-id="<%= item.id %>"><img src="assets/css/gfx/blank2x2.png" alt="" height="105" width="583" /></a></div></li>
+<li class="notification sheep-is-read-<%= item.is_read %> sheep-is-sheep-<%= item.sheep %>">
+    <p><%= item.text %></p>
+    <p class="time"><%= item.sent %></p>
+    <div class="image-overlay is-read-indicator"><img src="assets/css/gfx/blank2x2-trans.png" alt="" /></div>
+    <%= item.sheep_overlay %>
 </li>
 <%
     });
