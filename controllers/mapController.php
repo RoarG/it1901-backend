@@ -57,8 +57,8 @@ class MapController extends REST {
         $la = atan2($z, $hy);
         
         // Returning everything
-        return array('lat' => (string)($lo * (180 / M_PI)), 
-                     'lng' => (string)($la * (180 / M_PI)));
+        return array('lat' => (string)($la * (180 / M_PI)), 
+                     'lng' => (string)($lo * (180 / M_PI)));
     }
     
     //
