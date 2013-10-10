@@ -29,7 +29,7 @@ class NotificationController extends REST {
     // Actually getting the notifications speficied by different page and limit-values
     //
     
-    private function notifications($page, $num) {
+    private function notifications($page, $num, $update_read) {
         // Array for containing unread notifications
         $unread = array();
         
@@ -59,7 +59,7 @@ class NotificationController extends REST {
         }
         
         // Checking to see if we have unread notifications
-        if (count($unread) > 0) {
+        if (count($unread) > 0 and $update_read) {
             // Set the notifications to read
             $update_read = "INSERT INTO notification
             (id, is_read)
@@ -79,17 +79,17 @@ class NotificationController extends REST {
     
     // Getting the first 20 notifications
     protected function get_notification () {
-        return $this->notifications(1,20);
+        return $this->notifications(1, 20, true);
     }
     
     // Getting 20 notifications with pagination
     protected function get_notification_page($page) {
-        return $this->notifications($page,20);
+        return $this->notifications($page, 20, true);
     }
     
     // Getting the last 7 notifications (for the notification dropdownmenu)
     protected function get_notification_dropdown() {
-        return $this->notifications(1,7);
+        return $this->notifications(1, 7, false);
     }
     
     // Returning the number of unread notifications
