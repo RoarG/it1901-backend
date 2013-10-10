@@ -30,6 +30,12 @@ class TemplateFetcher {
             'base' => 'base.html'
         ),
         
+        // Notifications
+        'notifications' => array(
+            'base' => 'base.html',
+            'row' => 'row.html',
+        ),
+        
         // Sheep_all
         'sheep_all' => array(
             'base' => 'base.html',
