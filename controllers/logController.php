@@ -35,7 +35,7 @@ class LogController extends REST {
         
         // Defining return-array
         $ret = array();
-        $ret['notifications'] = array();
+        $ret['log'] = array();
         
         // Calculating the offset
         $offset = ($page - 1) * $num;

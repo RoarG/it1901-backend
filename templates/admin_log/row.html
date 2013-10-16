@@ -1,0 +1,10 @@
+<%
+    _.each(items,function(item,key,list) {
+%>
+<li class="notification">
+    <p><%= item.text %></p>
+    <p class="time"><%= item.sent %></p>
+</li>
+<%
+    });
+%>
