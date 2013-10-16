@@ -52,6 +52,7 @@ class REST {
         
         // Log
         '/log' => 'log', // GET
+        '/log/(:id)' => 'log_page', // GET
         
         // Contact
         '/contact' => 'contact', // GET, PUT
@@ -337,8 +338,8 @@ class REST {
     
     protected function log($text) {
         $log = "INSERT INTO log
-        (system, sent, text)
-        VALUES (:system, '".time()."',:text)";
+        (system, text)
+        VALUES (:system, :text)";
 
         $log_query = $this->db->prepare($log);
         $log_query->execute(array(':system' => $this->system, ':text' => $text));
