@@ -30,23 +30,29 @@ class UserController extends REST {
     //
 
     // Returning the current user
-    protected function get_user_me() {
-        // Just calling the get_user_id-method with the ID for this user
-        return $this->get_user_id($this->id);
-    }
-
-    // Returning information about the given user
-    protected function get_user_id($id) {
-        $get_user = "SELECT id, email, name, ".(($id == $this->id)?"lng, lat,":"")." last_seen, picture
+    protected function get_user() {
+        $get_user = "SELECT id, email, name
         FROM user 
         WHERE id = :id";
         
         $get_user_query = $this->db->prepare($get_user);
-        $get_user_query->execute(array(':id' => $id));
+        $get_user_query->execute(array(':id' => $this->id));
         $row = $get_user_query->fetch(PDO::FETCH_ASSOC);
         
+        // Fetch systemname
+        $get_system = "SELECT name
+        FROM system 
+        WHERE id = :system";
+        
+        $get_system_query = $this->db->prepare($get_system);
+        $get_system_query->execute(array(':system' => $this->system));
+        $temp_row = $get_system_query->fetch(PDO::FETCH_ASSOC);
+        
+        // Combine arrays
+        $row['system'] = $temp_row['name'];
+        
         // Check to see if the got a user or not
-       if (isset($row['id']) and strlen($row['id']) > 0) {
+        if (isset($row['id']) and strlen($row['id']) > 0) {
             return $row;
         }
         else {
