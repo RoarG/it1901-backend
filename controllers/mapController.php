@@ -77,7 +77,7 @@ class MapController extends REST {
         $ret['sheep'] = array();
         
         // Getting all sheeps with positions for the current system
-        $get_all_position = "SELECT sh.id, sh.identification, sh.lat, sh.lng, sh.alive
+        $get_all_position = "SELECT sh.id, sh.identification, sh.lat, sh.lng, sh.alive, sh.name, sh.last_updated
         FROM sheep sh 
         LEFT JOIN system_sheep AS sh_sys ON sh_sys.sheep = sh.id
         WHERE sh_sys.system = :system
