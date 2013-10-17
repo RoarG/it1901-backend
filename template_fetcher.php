@@ -33,6 +33,7 @@ class TemplateFetcher {
         // Notifications
         'notifications' => array(
             'base' => 'base.html',
+            'base_view' => 'base_view.html',
             'row' => 'row.html',
         ),
         
