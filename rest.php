@@ -2,7 +2,7 @@
 /*
  * File: rest.php
  * Holds: The REST-api with all its methods minus the actual api-methods being called
- * Last updated: 29.09.13
+ * Last updated: 17.10.13
  * Project: Prosjekt1
  * 
 */

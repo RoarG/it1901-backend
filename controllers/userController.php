@@ -2,7 +2,7 @@
 /*
  * File: userController.php
  * Holds: The UserController-class with all the methods for the user-calls
- * Last updated: 16.09.13
+ * Last updated: 17.10.13
  * Project: Prosjekt1
  * 
 */
