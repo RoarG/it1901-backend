@@ -1,5 +1,5 @@
-<form action="" method="post" name="admin_edit_form" id="admin_edit_form">
-    <div class="main-menu">
+<div class="main-menu">
+    <form action="" method="post" name="admin_edit_form1" id="admin_edit_form1">
         <div class="block">
             <div class="block-top">
                 <h2>Bruker</h2>
@@ -12,11 +12,21 @@
                 <div id="email_help" class="form_helptext"><p><b>E-post:</b> Må være en gyldig e-post. Denne brukes for å logge inn i systemet.</p></div>
                 
                 <input type="text" value="<%= system %>" placeholder="System" name="system" id="system" />
-                <div id="system_help" class="form_helptext"><p><b>System:</b> Navnet på systemet ditt. F.eks 'Lia Gård'.</p></div>
+                <div id="system_help" class="form_helptext"><p><b>System:</b> Navnet på systemet ditt. F.eks 'Lia Gård'.</p></div><div class="submit-container" id="edit_admin_bottom_container2">
+                    <div class="submit-container-left" id="edit_admin_error_container1">
+                        <p id="admin_edit_error1">Vennligst fyll ut felter i rødt korrekt.</p>
+                    </div>
+                    <div class="submit-container-right" id="edit_admin_button_container1">
+                        <input type="submit" class="right" value="Lagre" name="admin_edit_form_submit1" id="admin_edit_form_submit1" />
+                    </div>
+                    <div class="clear"></div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="main-menu">
+    </form>
+</div>
+<div class="main-menu">
+    <form action="" method="post" name="admin_edit_form2" id="admin_edit_form2">
         <div class="block">
             <div class="block-top">
                 <h2>Endre passord</h2>
@@ -30,22 +40,16 @@
                 
                 <input type="password" value="" placeholder="Gjenta nytt passord" name="new_password2" id="new_password2" />
                 <div id="new_password2_help" class="form_helptext"><p><b>Gjenta nytt passord:</b> Oppgi ditt nye passord igjen.</p></div>
-            </div>
-        </div>
-    </div>
-    <div class="main-menu">
-        <div class="block">
-            <div class="block-body block-all-radius">
-                <div class="submit-container" id="edit_admin_bottom_container">
-                    <div class="submit-container-left" id="edit_admin_error_container">
-                        <p id="sheep_add_error">Vennligst fyll ut felter i rødt korrekt.</p>
+                <div class="submit-container" id="edit_admin_bottom_container2">
+                    <div class="submit-container-left" id="edit_admin_error_container2">
+                        <p id="admin_edit_error2">Vennligst fyll ut felter i rødt korrekt.</p>
                     </div>
-                    <div class="submit-container-right" id="edit_admin_button_container">
-                        <input type="submit" class="right" value="Lagre" name="admin_edit_form_submit" id="admin_edit_form_submit" />
+                    <div class="submit-container-right" id="edit_admin_button_container2">
+                        <input type="submit" class="right" value="Lagre" name="admin_edit_form_submit2" id="admin_edit_form_submit2" />
                     </div>
                     <div class="clear"></div>
                 </div>
             </div>
         </div>
-    </div>
-</form>
+    </form>
+</div>

@@ -36,6 +36,7 @@ class REST {
         
         // User
         '/user' => 'user', // GET, PUT
+        '/user/login' => 'user_login', // PUT
         
         // Sheep
         '/sheep' => 'sheep', // GET, POST

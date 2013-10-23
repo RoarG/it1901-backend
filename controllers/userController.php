@@ -60,6 +60,35 @@ class UserController extends REST {
             return false;
         }
     }
+    
+    // Method to update the password for the current user
+    protected function put_user_login() {
+        // First check that we got everything we need
+        if (strlen($_POST['current_password_help']) < 5 or strlen($_POST['new_password1']) < 5 or strlen($_POST['new_password2']) < 5) {
+            $this->setReponseState(190, 'Missing data');
+        }
+        else {
+            if ($_POST['new_password1'] != $_POST['new_password2']) {
+                $this->setReponseState(191, 'Passwords do not match');
+            }
+            else {
+                $get_user = "SELECT pswd
+                FROM user 
+                WHERE id = :id";
+                
+                $get_user_query = $this->db->prepare($get_user);
+                $get_user_query->execute(array(':id' => $this->id));
+                $row = $get_user_query->fetch(PDO::FETCH_ASSOC);
+                
+                if ($row['pswd'] != $_POST['current_password_help']) {
+                    $this->setReponseState(192, 'Old password is incorrect');
+                }
+                else {
+                    // Update password here
+                }
+            }
+        }
+    }
 }
 
 //
