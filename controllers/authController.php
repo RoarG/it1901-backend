@@ -54,7 +54,7 @@ class AuthController extends REST {
         $reset_access_token_query->execute(array(':access_token' => $_GET['access_token']));
         
         // Logging logout
-        $this->log('User '.$this->id.' logged out of the system.');
+        $this->log($this->user_name.' (#'.$this->id.') logged out of the system.');
         
         // Empty return here
         return true;
@@ -71,7 +71,7 @@ class AuthController extends REST {
             // We have all the parameters, is the "username" a valid email?
             if(preg_match("/^([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+$/", $_POST['email'])) {
                 // Valid email, let's try to login!
-                $get_auth_values = "SELECT id, salt, access_token 
+                $get_auth_values = "SELECT id, salt, access_token, name
                 FROM user 
                 WHERE email = :email 
                 AND pswd = :pswd";
@@ -121,8 +121,8 @@ class AuthController extends REST {
                     // Returning successful message to user with the new access_token
                     $ret = array('access_token' => $access_token, 'user_id' => $row['id'], 'system_id' => $system['id'], 'system_name' => $system['name'], 'notifications' => $notifications['num_notifications']);
                     
-                    // Logging logout
-                    $this->log('User '.$this->id.' logged in.');
+                    // Logging login
+                    $this->log($row['name'].' (#'.$row['id'].') logged in.');
                 }
                 else {
                     $this->setReponseState(131, 'No such user');
@@ -170,6 +170,9 @@ class AuthController extends REST {
         
         // Returning successful message to user with the new access_token
         $ret = array('user_id' => $this->id, 'system_id' => $system['id'], 'system_name' => $system['name'], 'notifications' => $notifications['num_notifications']);
+        
+        // Logging validation
+        $this->log($this->user_name.' (#'.$this->id.') returned to the system.');
         
         // Returning
         return $ret;

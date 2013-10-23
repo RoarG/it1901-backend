@@ -101,7 +101,7 @@ class SheepController extends REST {
                     $post_sheep_query2->execute(array(':system' => $this->system, ':sheep' => $new_sheep_id));
                     
                     // Logging cration
-                    $this->log('Created sheep with id '.$new_sheep_id.', identification #'.$_POST['identification'].' and name '.$_POST['name']);
+                    $this->log('User '.$this->name.' (#'.$this->id.') created a new sheep called '.$_POST['name'].', with identification #'.$_POST['identification']);
                     
                     return array('id' => $new_sheep_id);
                 }
@@ -157,8 +157,8 @@ class SheepController extends REST {
         $delete_sheep_query = $this->db->prepare($delete_sheep);
         $delete_sheep_query->execute(array(':system' => $this->system, ':id' => $id));
         
-        // Logging deleting
-        $this->log('Deleted sheep #'.$id);
+        // Logging deleting TODO, GET NAME AND IDENTIFICATION
+         $this->log($this->user_name.' (#'.$this->id.') deleted sheep with id #'.$id.'.');
         
         return true;
     }
@@ -228,7 +228,7 @@ class SheepController extends REST {
                         $post_sheep_query->execute(array(':identification' => $_POST['identification'], ':name' => $_POST['name'], ':birthday' => $_POST['birthday'], ':weight' => $_POST['weight'], ':vaccine' => $_POST['vaccine'], ':lat' => $_POST['lat'], ':lng' => $_POST['lng'], ':comment' => $_POST['comment'], ':id' => $id));
                         
                         // Logging cration
-                        $this->log('Updated sheep with id '.$id.', identification #'.$_POST['identification'].' and name '.$_POST['name']);
+                        $this->log($this->user_name.' (#'.$this->id.') updated sheep with id '.$id.', identification #'.$_POST['identification'].' and name '.$_POST['name'].'.');
                         
                         return array('id' => $id);
                     }
