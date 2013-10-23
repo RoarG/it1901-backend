@@ -2,7 +2,7 @@
 /*
  * File: contactController.php
  * Holds: The contactController-class with all the methods for listing and editing contacts
- * Last updated: 29.09.13
+ * Last updated: 23.10.13
  * Project: Prosjekt1
  * 
 */

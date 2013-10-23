@@ -2,7 +2,7 @@
 /*
  * File: authController.php
  * Holds: The AuthController-class with all the methods for the auth-calls
- * Last updated: 29.09.13
+ * Last updated: 23.10.13
  * Project: Prosjekt1
  * 
 */

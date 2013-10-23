@@ -2,7 +2,7 @@
 /*
  * File: run.php
  * Holds: Method to initiate the different controllers dynamically
- * Last updated: 16.09.13
+ * Last updated: 23.09.13
  * Project: Prosjekt1
  * 
 */
