@@ -16,9 +16,6 @@ $classToCall = ucfirst($name[0]);
 // Creating a new instance
 $controller = new $classToCall($this->getResponse());
 
-// Logging
-$controller->doLog();
-
 // Printing the final response
 $controller->printResponse();
 ?>

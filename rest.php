@@ -356,41 +356,5 @@ class REST {
         // Outputting the content
         echo json_encode($this->response);
     }
-
-    //
-    // Logging - DEVELOP
-    //
-
-    public function doLog() {
-        if (isset($_GET['q'])) {
-            $call = $_GET['q'];
-        }
-        else {
-            $call = '/';
-        }
-
-        if (isset($_GET['method'])) {
-            $method = $_GET['method'];
-        }
-        else {
-            $method = 'Unknown';
-        }
-        
-        // The insert
-        $sql = "INSERT INTO sys_log
-        (user, method, call_url, url, time, user_agent, get, post, response)
-        VALUES (:user, :method, :call, :url, NOW(), :user_agent, :get, :post, :response)";
-        $statement = $this->db->prepare($sql);
-        $statement->execute(array(
-            ':user' => $this->id,
-            ':method' => $method,
-            ':call' => $call,
-            ':url' => $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"],
-            ':user_agent' => $_SERVER['HTTP_USER_AGENT'],
-            ':get' => json_encode($_GET),
-            ':post' => json_encode($_POST),
-            ':response' => json_encode($this->response)));
-        $row = $statement->fetch(PDO::FETCH_ASSOC);
-    }
 }
 ?>
