@@ -22,6 +22,7 @@ class REST {
     protected $response = array(); // The response to be coded to json
     protected $id; // Holds the current user's id
     protected $system; // Holds the current system id
+    protected $user_name; // Holds the name of the current user
     protected $method_url; // Holds the arrays with the path and method being called
 
     //
@@ -175,7 +176,7 @@ class REST {
     //
 
     private function checkToken() {
-        $get_access_token = "SELECT id
+        $get_access_token = "SELECT id, name
         FROM user
         WHERE access_token = :access_token";
 
@@ -186,6 +187,9 @@ class REST {
         if (isset($row['id']) and strlen($row['id']) > 0) {
             // Storing the current userid
             $this->id = $row['id'];
+            
+            // Storing the current name
+            $this->user_name = $row['name'];
             
             // Load the current system and store the id for later
             $get_system = "SELECT sys.id
