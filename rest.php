@@ -2,7 +2,7 @@
 /*
  * File: rest.php
  * Holds: The REST-api with all its methods minus the actual api-methods being called
- * Last updated: 23.10.13
+ * Last updated: 24.10.13
  * Project: Prosjekt1
  * 
 */
@@ -59,10 +59,22 @@ class REST {
         // Contact
         '/contact' => 'contact', // GET, PUT
         
+        // Chip
+        '/chip/(:id)' => 'chip', // PUT
+        
+        // Master
+        '/master/list' => 'master_list', // GET
+        '/master/(:id)' => 'master_sheep', // GET
+        '/master/(:id)/stats' => 'master_stats', // GET
+        
     );
 
     private $ignore_no_at = array(
         '/auth' => 'put', // Logging in requires no access_token
+        '/chip/(:id)' => 'put', // Updating sheep-info requires only the sheep-hash
+        '/master/list' => 'get', // All master-related uses the master-hash
+        '/master/(:id)' => 'get', // All master-related uses the master-hash
+        '/master/(:id)/stats' => 'get', // All master-related uses the master-hash
     );
 
     //
