@@ -24,6 +24,7 @@ class REST {
     protected $system; // Holds the current system id
     protected $user_name; // Holds the name of the current user
     protected $method_url; // Holds the arrays with the path and method being called
+    protected $master_password; // Holds the master-password for the master-methods
 
     //
     // Defining the different paths, methods nd what calls don't need an access_token
@@ -61,20 +62,11 @@ class REST {
         
         // Chip
         '/chip/(:id)' => 'chip', // PUT
-        
-        // Master
-        '/master/list' => 'master_list', // GET
-        '/master/(:id)' => 'master_sheep', // GET
-        '/master/(:id)/stats' => 'master_stats', // GET
-        
     );
 
     private $ignore_no_at = array(
         '/auth' => 'put', // Logging in requires no access_token
         '/chip/(:id)' => 'put', // Updating sheep-info requires only the sheep-hash
-        '/master/list' => 'get', // All master-related uses the master-hash
-        '/master/(:id)' => 'get', // All master-related uses the master-hash
-        '/master/(:id)/stats' => 'get', // All master-related uses the master-hash
     );
 
     //
