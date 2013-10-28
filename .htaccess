@@ -1,9 +1,6 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    
-    <IfModule mod_vhost_alias.c>
-        RewriteBase /prosjekt1/app/api/
-    </IfModule>
+    RewriteBase /prosjekt1/app/api/
     
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
