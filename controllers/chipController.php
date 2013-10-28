@@ -62,9 +62,8 @@ class ChipController extends REST {
                         if ($_POST['type'] == 'position') {
                             // Update position only
                             $post_sheep = "UPDATE sheep
-                            SET identification = :identification,
-                            lat = :lat,
-                            lng = :lng,
+                            SET lat = :lat,
+                            lng = :lng
                             WHERE id = :id";
                             
                             $post_sheep_query = $this->db->prepare($post_sheep);
@@ -104,6 +103,20 @@ class ChipController extends REST {
                             $send_notification_query = $this->db->prepare($send_notification);
                             $send_notification_query->execute(array(':system' => $row['system'], ':text' => $row['name']. '(#'.$row['identification'].') ble nettopp drept!', ':sheep' => $id));
                         }
+                        
+                        // Fetch the updates!
+                        $get_sheep = "SELECT sh.*
+                        FROM sheep sh 
+                        LEFT JOIN system_sheep AS sh_sys ON sh_sys.sheep = sh.id
+                        WHERE sh_sys.system = :system
+                        AND sh_sys.sheep = :id
+                        ORDER BY sh.id ASC";
+                        
+                        $get_sheep_query = $this->db->prepare($get_sheep);
+                        $get_sheep_query->execute(array(':system' => $row['system'], ':id' => $id));
+                        $row = $get_sheep_query->fetch(PDO::FETCH_ASSOC);
+                        
+                        return $row;
                     }
                     else {
                         // Invalid update-type
