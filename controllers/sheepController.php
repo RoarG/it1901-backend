@@ -101,7 +101,7 @@ class SheepController extends REST {
                     $post_sheep_query2->execute(array(':system' => $this->system, ':sheep' => $new_sheep_id));
                     
                     // Logging cration
-                    $this->log('User '.$this->user_name.' (#'.$this->id.') created a new sheep called '.$_POST['name'].', with identification #'.$_POST['identification']);
+                    $this->log('User '.$this->user_name.' (#'.$this->id.') opprettet en ny sau; '.$_POST['name'].' (#'.$_POST['identification'].')');
                     
                     return array('id' => $new_sheep_id);
                 }
@@ -147,7 +147,18 @@ class SheepController extends REST {
         // Defining return-array
         $ret = array();
         
-        // Get information about one sheep (if it exists)
+        $get_sheep = "SELECT sh.name, sh.identification
+        FROM sheep sh 
+        LEFT JOIN system_sheep AS sh_sys ON sh_sys.sheep = sh.id
+        WHERE sh_sys.system = :system
+        AND sh_sys.sheep = :id
+        ORDER BY sh.id ASC";
+        
+        $get_sheep_query = $this->db->prepare($get_sheep);
+        $get_sheep_query->execute(array(':system' => $this->system, ':id' => $id));
+        $row = $get_sheep_query->fetch(PDO::FETCH_ASSOC);
+        
+        // Delete the sheep
         $delete_sheep = "DELETE sheep, system_sheep
         FROM sheep, system_sheep
         WHERE system_sheep.sheep = sheep.id
@@ -158,7 +169,7 @@ class SheepController extends REST {
         $delete_sheep_query->execute(array(':system' => $this->system, ':id' => $id));
         
         // Logging deleting TODO, GET NAME AND IDENTIFICATION
-         $this->log($this->user_name.' (#'.$this->id.') deleted sheep with id #'.$id.'.');
+         $this->log($this->user_name.' (#'.$this->id.') slettet sau '.$row['name'].' (#'.$row['identification'].').');
         
         return true;
     }
@@ -228,7 +239,7 @@ class SheepController extends REST {
                         $post_sheep_query->execute(array(':identification' => $_POST['identification'], ':name' => $_POST['name'], ':birthday' => $_POST['birthday'], ':weight' => $_POST['weight'], ':vaccine' => $_POST['vaccine'], ':lat' => $_POST['lat'], ':lng' => $_POST['lng'], ':comment' => $_POST['comment'], ':id' => $id));
                         
                         // Logging cration
-                        $this->log($this->user_name.' (#'.$this->id.') updated sheep with id '.$id.', identification #'.$_POST['identification'].' and name '.$_POST['name'].'.');
+                        $this->log($this->user_name.' (#'.$this->id.') endret info på '.$_POST['name'].' (#'.$_POST['identification'].').');
                         
                         return array('id' => $id);
                     }

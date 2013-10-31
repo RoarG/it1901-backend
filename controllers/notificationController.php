@@ -89,7 +89,7 @@ class NotificationController extends REST {
     
     // Getting the last 7 notifications (for the notification dropdownmenu)
     protected function get_notification_dropdown() {
-        return $this->notifications(1, 7, false);
+        return $this->notifications(1, 7, true);
     }
     
     // Returning the number of unread notifications

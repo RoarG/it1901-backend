@@ -84,6 +84,8 @@ class UserController extends REST {
 
             $update_system_query = $this->db->prepare($update_system);
             $update_system_query->execute(array(':system' => $_POST['system'], ':id' => $this->system));
+            
+            $this->log($this->user_name.' (#'.$this->id.') oppdaterte sitt personalia.');
         }
     }
     
@@ -119,6 +121,8 @@ class UserController extends REST {
                     
                     $update_password_query = $this->db->prepare($update_password);
                     $update_password_query->execute(array(':pswd' => $_POST['new_password2'], ':id' => $this->id));
+                
+                    $this->log($this->user_name.' (#'.$this->id.') endret passord.');
                 }
             }
         }

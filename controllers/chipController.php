@@ -84,7 +84,7 @@ class ChipController extends REST {
                             VALUES (:system, :text, :sheep)";
                     
                             $send_notification_query = $this->db->prepare($send_notification);
-                            $send_notification_query->execute(array(':system' => $row['system'], ':text' => $row['name']. '(#'.$row['identification'].') er skadet!', ':sheep' => $id));
+                            $send_notification_query->execute(array(':system' => $row['system'], ':text' => $row['name']. ' (#'.$row['identification'].') er skadet!', ':sheep' => $id));
                         }
                         else {
                             // Sheep died!!!
@@ -101,7 +101,7 @@ class ChipController extends REST {
                             VALUES (:system, :text, :sheep)";
                     
                             $send_notification_query = $this->db->prepare($send_notification);
-                            $send_notification_query->execute(array(':system' => $row['system'], ':text' => $row['name']. '(#'.$row['identification'].') ble nettopp drept!', ':sheep' => $id));
+                            $send_notification_query->execute(array(':system' => $row['system'], ':text' => $row['name']. ' (#'.$row['identification'].') er drept!', ':sheep' => $id));
                         }
                         
                         // Fetch the updates!

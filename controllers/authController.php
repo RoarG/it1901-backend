@@ -54,7 +54,7 @@ class AuthController extends REST {
         $reset_access_token_query->execute(array(':access_token' => $_GET['access_token']));
         
         // Logging logout
-        $this->log($this->user_name.' (#'.$this->id.') logged out of the system.');
+        $this->log($this->user_name.' (#'.$this->id.') logget ut av systemet.');
         
         // Empty return here
         return true;
@@ -122,7 +122,7 @@ class AuthController extends REST {
                     $ret = array('access_token' => $access_token, 'user_id' => $row['id'], 'system_id' => $system['id'], 'system_name' => $system['name'], 'notifications' => $notifications['num_notifications']);
                     
                     // Logging login
-                    $this->log($row['name'].' (#'.$row['id'].') logged in.');
+                    $this->log($row['name'].' (#'.$row['id'].') logget inn.');
                 }
                 else {
                     $this->setReponseState(131, 'No such user');
@@ -172,7 +172,7 @@ class AuthController extends REST {
         $ret = array('user_id' => $this->id, 'system_id' => $system['id'], 'system_name' => $system['name'], 'notifications' => $notifications['num_notifications']);
         
         // Logging validation
-        $this->log($this->user_name.' (#'.$this->id.') returned to the system.');
+        $this->log($this->user_name.' (#'.$this->id.') returnerte til systemet.');
         
         // Returning
         return $ret;
