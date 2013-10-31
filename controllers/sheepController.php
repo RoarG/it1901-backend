@@ -107,7 +107,7 @@ class SheepController extends REST {
                 }
                 else {
                     // Maleformed input
-                $this->setReponseState(182, 'Maleformed sheep-input');
+                    $this->setReponseState(182, 'Maleformed sheep-input');
                 }
             }
         }
@@ -169,7 +169,7 @@ class SheepController extends REST {
         $delete_sheep_query->execute(array(':system' => $this->system, ':id' => $id));
         
         // Logging deleting TODO, GET NAME AND IDENTIFICATION
-         $this->log($this->user_name.' (#'.$this->id.') slettet sau '.$row['name'].' (#'.$row['identification'].').');
+        $this->log($this->user_name.' (#'.$this->id.') slettet sau '.$row['name'].' (#'.$row['identification'].').');
         
         return true;
     }
