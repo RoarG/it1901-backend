@@ -135,7 +135,7 @@ class ChipController extends REST {
                                 }
                             }
                             if (count($temp_mails) > 0) {
-                                foreach ($contact_pure as $v) {
+                                foreach ($temp_mails as $v) {
                                     if (!in_array($v['epost'], $mails)) {
                                         $mails[] = $v['epost'];
                                     }
