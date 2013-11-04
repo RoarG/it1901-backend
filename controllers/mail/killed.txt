@@ -1,0 +1,41 @@
+<html>
+<body>
+<table width="98%">
+	<tr>
+		<td>
+			<table width="411">
+				<tr>
+					<td height="10">
+					</td>
+				</tr>
+				<tr>
+					<td height="39" width="241">
+					</td>
+					<td height="39" width="170">
+						<img src="http://www.optimuscrime.net/prosjekt1/app/api/email-logo.png" width="170" height="39" alt="Sheep Locator" />
+					</td>
+				</tr>
+			</table>
+			<table width="411">
+				<tr>
+					<td>
+						<p style="font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:14px; color:#000000;">Hei.</p>
+						<p style="font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:14px; color:#000000;"></p>
+						<p style="font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:14px; color:#000000;">Dette er en automatisk e-post fra Sheep Locator.</p>
+						<p style="font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:14px; color:#000000;"></p>
+						<p style="font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:18px; color:#000000;">Din sau {{NAVN}} ble drept kl {{TID}} på koordinatene {{KOORDINATER}}. Åpne appen for detaljer.</p>
+					</td>
+				</tr>
+			</table>
+			<table width="411">
+				<tr>
+					<td>
+						<p style="font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:18px; color:#000000; font-style:italic">Du mottar denne e-posten fordi du er satt opp som en automatisk mottaker av slike automatiske varslinger. Dersom du ikke ønsker å motta disse e-postene lenger må du kontakte eieren av systemet.</p>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+</body>
+</html>
