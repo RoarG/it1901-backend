@@ -9,10 +9,10 @@
 					</td>
 				</tr>
 				<tr>
-					<td height="39" width="241">
+					<td height="43" width="241">
 					</td>
-					<td height="39" width="170">
-						<img src="http://www.optimuscrime.net/prosjekt1/app/api/email-logo.png" width="170" height="39" alt="Sheep Locator" />
+					<td height="43" width="170">
+						<img src="http://www.optimuscrime.net/prosjekt1/app/api/email-logo.png" width="170" height="43" alt="Sheep Locator" />
 					</td>
 				</tr>
 			</table>
