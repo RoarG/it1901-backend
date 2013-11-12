@@ -24,6 +24,42 @@ class SheepController extends REST {
         // Calling RESTs constructor
         parent::__construct($response);
     }
+    
+    //
+    // Calculate center from multiple lat,lng-coordinates
+    //
+    
+    private function find_center($arr) { // http://stackoverflow.com/a/14231286/921563
+        // Define all variables
+        $x = 0;
+        $y = 0;
+        $z = 0;
+        
+        foreach ($arr as $v) {
+            // To degrees
+            $lat = $v['lat'] * (M_PI / 180);
+            $lng = $v['lng'] * (M_PI / 180);
+            
+            // Adding the numbers
+            $x += cos($lat) * cos($lng);
+            $y += cos($lat) * sin($lng);
+            $z += sin($lat);
+        }
+        
+        // Finding average
+        $x = $x/count($arr);
+        $y = $y/count($arr);
+        $z = $z/count($arr);
+        
+        // Calculating back to coordinates
+        $lo = atan2($y, $x);
+        $hy = sqrt($x * $x + $y * $y);
+        $la = atan2($z, $hy);
+        
+        // Returning everything
+        return array('lat' => (string)($la * (180 / M_PI)), 
+                     'lng' => (string)($lo * (180 / M_PI)));
+    }
 
     //
     // Api-methods
@@ -55,10 +91,10 @@ class SheepController extends REST {
     // Create new sheep
     protected function post_sheep() {
         // Check if all the params we need is sat
-        if ($this->checkRequiredParams(array('identification','name','birthday','weight','vaccine','lat','lng'),$_POST)) {
+        if ($this->checkRequiredParams(array('identification','name','birthday','weight','vaccine','chip'),$_POST)) {
             // Validate the content of the fields
             $error = false;
-            foreach (array('identification','weight','vaccine','lat','lng') as $k) {
+            foreach (array('identification','weight','vaccine','chip') as $k) {
                 if (!is_numeric($_POST[$k])) {
                     $error = true;
                 }
@@ -81,29 +117,62 @@ class SheepController extends REST {
                 
                 // Check if date was validated correctly
                 if (!$error) {
-                    // Insert the sheep
-                    $post_sheep = "INSERT INTO sheep
-                    (identification, name, birthday, weight, vaccine, lat, lng)
-                    VALUES (:identification, :name, :birthday, :weight, :vaccine, :lat, :lng)";
+                    // Variable for checking that chip is unique
+                    $chip_unique = true;
                     
-                    $post_sheep_query = $this->db->prepare($post_sheep);
-                    $post_sheep_query->execute(array(':identification' => $_POST['identification'], ':name' => $_POST['name'], ':birthday' => $_POST['birthday'], ':weight' => $_POST['weight'], ':vaccine' => $_POST['vaccine'], ':lat' => $_POST['lat'], ':lng' => $_POST['lng']));
-
-                    // Get the sheep-id
-                    $new_sheep_id = $this->db->lastInsertId();
+                    // Generate center of sheep-herd and set that as default-position for the new sheep
+                    $sheep_arr = array();
+                    $get_all_position = "SELECT sh.chip, sh.lat, sh.lng
+                    FROM sheep sh 
+                    LEFT JOIN system_sheep AS sh_sys ON sh_sys.sheep = sh.id
+                    WHERE sh_sys.system = :system
+                    ORDER BY sh.id ASC";
                     
-                    // Insert the system_sheep
-                    $post_sheep2 = "INSERT INTO system_sheep
-                    (system, sheep)
-                    VALUES (:system, :sheep)";
+                    $get_all_position_query = $this->db->prepare($get_all_position);
+                    $get_all_position_query->execute(array(':system' => $this->system));
+                    while ($row = $get_all_position_query->fetch(PDO::FETCH_ASSOC)) {
+                        // Add sheep to array
+                        $sheep_arr[] = $row;
+                        
+                        if ($row['chip'] == $_POST['chip']) {
+                            $chip_unique = false;
+                            break;
+                        }
+                    }
                     
-                    $post_sheep_query2 = $this->db->prepare($post_sheep2);
-                    $post_sheep_query2->execute(array(':system' => $this->system, ':sheep' => $new_sheep_id));
-                    
-                    // Logging cration
-                    $this->log('User '.$this->user_name.' (#'.$this->id.') opprettet en ny sau; '.$_POST['name'].' (#'.$_POST['identification'].')');
-                    
-                    return array('id' => $new_sheep_id);
+                    // Check if unique chip
+                    if ($chip_unique) {
+                        // Generate center if there are no highlighted sheep
+                        $new_pos = $this->find_center($sheep_arr);
+                        
+                        // Insert the sheep
+                        $post_sheep = "INSERT INTO sheep
+                        (identification, chip, name, birthday, weight, vaccine, lat, lng)
+                        VALUES (:identification, :chip, :name, :birthday, :weight, :vaccine, :lat, :lng)";
+                        
+                        $post_sheep_query = $this->db->prepare($post_sheep);
+                        $post_sheep_query->execute(array(':identification' => $_POST['identification'], ':chip' => $_POST['chip'], ':name' => $_POST['name'], ':birthday' => $_POST['birthday'], ':weight' => $_POST['weight'], ':vaccine' => $_POST['vaccine'], ':lat' => $new_pos['lat'], ':lng' => $new_pos['lng']));
+                        
+                        // Get the sheep-id
+                        $new_sheep_id = $this->db->lastInsertId();
+                        
+                        // Insert the system_sheep
+                        $post_sheep2 = "INSERT INTO system_sheep
+                        (system, sheep)
+                        VALUES (:system, :sheep)";
+                        
+                        $post_sheep_query2 = $this->db->prepare($post_sheep2);
+                        $post_sheep_query2->execute(array(':system' => $this->system, ':sheep' => $new_sheep_id));
+                        
+                        // Logging cration
+                        $this->log('User '.$this->user_name.' (#'.$this->id.') opprettet en ny sau; '.$_POST['name'].' (#'.$_POST['identification'].')');
+                        
+                        return array('id' => $new_sheep_id);
+                    }
+                    else {
+                        // Chip already in use!
+                        $this->setReponseState(183, 'Chip already in use');
+                    }
                 }
                 else {
                     // Maleformed input
@@ -197,10 +266,10 @@ class SheepController extends REST {
         }
         else {
             // We have a sheep, check if required data is presented
-            if ($this->checkRequiredParams(array('identification','name','birthday','weight','vaccine','lat','lng'),$_POST)) {
+            if ($this->checkRequiredParams(array('identification','name','birthday','weight','vaccine','chip'),$_POST)) {
                 // Validate the content of the fields
                 $error = false;
-                foreach (array('identification','weight','vaccine','lat','lng') as $k) {
+                foreach (array('identification','weight','vaccine','chip') as $k) {
                     if (!is_numeric($_POST[$k])) {
                         $error = true;
                     }
