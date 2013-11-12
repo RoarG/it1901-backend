@@ -292,25 +292,44 @@ class SheepController extends REST {
                     
                     // Check if date was validated correctly
                     if (!$error) {
-                        // Insert the sheep
-                        $post_sheep = "UPDATE sheep
-                        SET identification = :identification,
-                        name = :name,
-                        birthday = :birthday,
-                        weight = :weight,
-                        vaccine = :vaccine,
-                        lat = :lat,
-                        lng = :lng,
-                        comment = :comment
-                        WHERE id = :id";
-                        
-                        $post_sheep_query = $this->db->prepare($post_sheep);
-                        $post_sheep_query->execute(array(':identification' => $_POST['identification'], ':name' => $_POST['name'], ':birthday' => $_POST['birthday'], ':weight' => $_POST['weight'], ':vaccine' => $_POST['vaccine'], ':lat' => $_POST['lat'], ':lng' => $_POST['lng'], ':comment' => $_POST['comment'], ':id' => $id));
-                        
-                        // Logging cration
-                        $this->log($this->user_name.' (#'.$this->id.') endret info på '.$_POST['name'].' (#'.$_POST['identification'].').');
-                        
-                        return array('id' => $id);
+                        // Check if the chip is already in use on another sheep
+                        $get_identical_chip = "SELECT sh.id
+                        FROM sheep sh 
+                        LEFT JOIN system_sheep AS sh_sys ON sh_sys.sheep != sh.id
+                        WHERE sh_sys.system = :system
+                        AND sh_sys.sheep = :id
+                        AND sh.chip = :chip
+                        ORDER BY sh.id ASC";
+        
+                        $get_identical_chip_query = $this->db->prepare($get_identical_chip);
+                        $get_identical_chip_query->execute(array(':system' => $this->system, ':id' => $id, ':chip' => $_POST['chip']));
+                        $row2 = $get_identical_chip_query->fetch(PDO::FETCH_ASSOC);
+        
+                        // Checking if sheep exists
+                        if (isset($row2['id'])) {
+                            // Chip already in use!
+                            $this->setReponseState(183, 'Chip already in use');
+                        }
+                        else {
+                            // Insert the sheep
+                            $post_sheep = "UPDATE sheep
+                            SET identification = :identification,
+                            chip = :chip,
+                            name = :name,
+                            birthday = :birthday,
+                            weight = :weight,
+                            vaccine = :vaccine,
+                            comment = :comment
+                            WHERE id = :id";
+                            
+                            $post_sheep_query = $this->db->prepare($post_sheep);
+                            $post_sheep_query->execute(array(':identification' => $_POST['identification'], ':chip' => $_POST['chip'], ':name' => $_POST['name'], ':birthday' => $_POST['birthday'], ':weight' => $_POST['weight'], ':vaccine' => $_POST['vaccine'], ':comment' => $_POST['comment'], ':id' => $id));
+                            
+                            // Logging cration
+                            $this->log($this->user_name.' (#'.$this->id.') endret info på '.$_POST['name'].' (#'.$_POST['identification'].').');
+                            
+                            return array('id' => $id);
+                        }
                     }
                     else {
                         // Maleformed input
