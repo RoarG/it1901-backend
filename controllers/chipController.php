@@ -2,7 +2,7 @@
 /*
  * File: chipController.php
  * Holds: The chipController-class with all the updates from a chip mounted on a sheep
- * Last updated: 04.11.13
+ * Last updated: 12.11.13
  * Project: Prosjekt1
  * 
 */
@@ -71,7 +71,7 @@ class ChipController extends REST {
     //
     
     // Update a sheep with chip-data
-    protected function put_chip ($id) {
+    protected function put_chip ($chip) {
         // Check if the sheep and/or hash exists
         if (isset($_GET['sheep_token'])) {
             $get_sheep = "SELECT sh.*, sh_sys.system
@@ -79,11 +79,11 @@ class ChipController extends REST {
             LEFT JOIN system_sheep AS sh_sys ON sh_sys.sheep = sh.id
             LEFT JOIN system AS sys ON sh_sys.system = sys.id
             WHERE sys.sheep_token = :sheep_token
-            AND sh.id = :id
+            AND sh.chip = :chip
             ORDER BY sh.id ASC";
             
             $get_sheep_query = $this->db->prepare($get_sheep);
-            $get_sheep_query->execute(array(':sheep_token' => $_GET['sheep_token'], ':id' => $id));
+            $get_sheep_query->execute(array(':sheep_token' => $_GET['sheep_token'], ':chip' => $chip));
             $row = $get_sheep_query->fetch(PDO::FETCH_ASSOC);
             
             // Checking if sheep exists
@@ -152,7 +152,7 @@ class ChipController extends REST {
                             WHERE id = :id";
                             
                             $post_sheep_query = $this->db->prepare($post_sheep);
-                            $post_sheep_query->execute(array(':lat' => $_POST['lat'], ':lng' => $_POST['lng'], ':id' => $id));
+                            $post_sheep_query->execute(array(':lat' => $_POST['lat'], ':lng' => $_POST['lng'], ':id' => $row['id']));
                         }
                         else if ($_POST['type'] == 'wounded') {
                             // Dummy update to force "last updated" to match
@@ -161,7 +161,7 @@ class ChipController extends REST {
                             WHERE id = :id";
                             
                             $post_sheep_query = $this->db->prepare($post_sheep);
-                            $post_sheep_query->execute(array(':id' => $id));
+                            $post_sheep_query->execute(array(':id' => $row['id']));
                             
                             // Notification!
                             $send_notification = "INSERT INTO notification
@@ -169,7 +169,7 @@ class ChipController extends REST {
                             VALUES (:system, :text, :sheep)";
                     
                             $send_notification_query = $this->db->prepare($send_notification);
-                            $send_notification_query->execute(array(':system' => $row['system'], ':text' => $row['name']. ' (#'.$row['identification'].') er skadet!', ':sheep' => $id));
+                            $send_notification_query->execute(array(':system' => $row['system'], ':text' => $row['name']. ' (#'.$row['identification'].') er skadet!', ':sheep' => $row['id']));
                             
                             // Mail
                             $this->send_mail($_POST['type'], $mails, array('{{NAVN}}' =>  $row['name']. ' (#'.$row['identification'].')',
@@ -183,7 +183,7 @@ class ChipController extends REST {
                             WHERE id = :id";
                             
                             $post_sheep_query = $this->db->prepare($post_sheep);
-                            $post_sheep_query->execute(array(':id' => $id));
+                            $post_sheep_query->execute(array(':id' => $row['id']));
                             
                             // Notification!
                             $send_notification = "INSERT INTO notification
@@ -191,7 +191,7 @@ class ChipController extends REST {
                             VALUES (:system, :text, :sheep)";
                     
                             $send_notification_query = $this->db->prepare($send_notification);
-                            $send_notification_query->execute(array(':system' => $row['system'], ':text' => $row['name']. ' (#'.$row['identification'].') er drept!', ':sheep' => $id));
+                            $send_notification_query->execute(array(':system' => $row['system'], ':text' => $row['name']. ' (#'.$row['identification'].') er drept!', ':sheep' => $row['id']));
                             
                             $this->send_mail($_POST['type'], $mails, array('{{NAVN}}' =>  $row['name']. ' (#'.$row['identification'].')',
                                                                            '{{TID}}' => date('G:i:s, d-m-Y'),
@@ -207,7 +207,7 @@ class ChipController extends REST {
                         ORDER BY sh.id ASC";
                         
                         $get_sheep_query = $this->db->prepare($get_sheep);
-                        $get_sheep_query->execute(array(':system' => $row['system'], ':id' => $id));
+                        $get_sheep_query->execute(array(':system' => $row['system'], ':id' => $row['id']));
                         $row = $get_sheep_query->fetch(PDO::FETCH_ASSOC);
                         
                         return $row;

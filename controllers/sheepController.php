@@ -2,7 +2,7 @@
 /*
  * File: sheepController.php
  * Holds: The sheepController-class with all the methods for the sheep-calls
- * Last updated: 29.09.13
+ * Last updated: 12.11.13
  * Project: Prosjekt1
  * 
 */
