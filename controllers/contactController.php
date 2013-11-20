@@ -61,7 +61,7 @@ class ContactController extends REST {
         $put_contact_query->execute(array(':system' => $this->system, ':contact' => json_encode($contact)));
         
         // Logging
-        $this->log($this->user_name.' (#'.$this->id.') updated the contact-information.');
+        $this->log($this->user_name.' (#'.$this->id.') har oppdatert varslingsinformasjon.');
     }
 }
 
