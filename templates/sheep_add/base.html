@@ -1,0 +1,48 @@
+<div class="main-menu">
+    <div class="block block-last">
+        <div class="block-top"><div class="block-icon" id="block-icon-sheep"></div>
+            <h2>Ny sau</h2>
+        </div>
+        <div class="block-body">
+            <form action="" method="post" name="sheep_add_form" id="sheep_add_form">
+                <div id="identification-holder" class="input-hax">
+                    <p>#</p>
+                    <input type="text" value="" placeholder="Identifikasjon" name="identification" id="identification" maxlength="25" />
+                </div>
+                <div id="identification_help" class="form_helptext"><p><b>Identifikasjon:</b> Kan kun bestå av hele tall. Makslengde på 25 tegn.</p></div>
+                
+                <input type="text" value="" placeholder="Navn" name="name" id="name" />
+                <div id="name_help" class="form_helptext"><p><b>Navn:</b> Må være minst 2 tegn langt.</p></div>
+                
+                <input type="date" value="" placeholder="Bursdag" name="birthday" id="birthday" />
+                <div id="birthday_help" class="form_helptext"><p><b>Bursdag:</b> Må fylles ut gjennom dato-velgeren i nettleseren eller på formen åååå-mm-dd.</p></div>
+                
+                <input type="number" value="" placeholder="Vekt" name="weight" id="weight" />
+                <div id="weight_help" class="form_helptext"><p><b>Vekt:</b> Kan bestå av enten heltall eller kommatall.</p></div>
+                <div id="sheep-add-dropdown" class="input-dropdown"><div class="arrow"></div>
+                    <input type="hidden" value="1" name="vaccine" id="vaccine" />
+                    <div class="dropdown-head">
+                        <p>Vaksinert: Ja</p>
+                    </div>
+                    <div class="dropdown-body">
+                        <ul>
+                            <li class="active"><a href="#" data-value="1">Ja</a></li>
+                            <li class="last"><a href="#" data-value="0">Nei</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <input type="number" value="" placeholder="Chip-id" name="chip" id="chip" />
+                <div id="chip_help" class="form_helptext"><p><b>Chip-id:</b> Må bestå av heltall som må være unikt i systemet.</p></div>
+                <div class="submit-container" id="login_bottom_container">
+                    <div class="submit-container-left" id="login_error_container">
+                        <p id="sheep_add_error">Vennligst fyll ut felter i rødt korrekt.</p>
+                    </div>
+                    <div class="submit-container-right" id="login_button_container">
+                        <input type="submit" class="right" value="Lagre" name="sheep_add_form_submit" id="sheep_add_form_submit" />
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
